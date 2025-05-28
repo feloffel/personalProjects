@@ -1785,7 +1785,8 @@ const haltepunkte = [
     name: "Durlach Untermühlstraße",
     lat: 49.00207214,
     lon: 8.4549704,
-    type: "bus"
+    type: ["stadtbahn", "tram"],
+    lines: ["S4", "S5", "S51", "1", "2", "5"]
   },
   {
     name: "Karlsruhe Pappelallee",
@@ -1803,49 +1804,56 @@ const haltepunkte = [
     name: "KA Durlacher Tor/KIT-Campus Süd (U)",
     lat: 49.0090021,
     lon: 8.41669319,
-    type: "ubahn"
+    type: ["ubahn", "tram"],
+     lines: ["S2", "S4", "S5", "S51", "S7", "S71", "S8", "1", "2"]
   },
   {
     name: "Karlsruhe Kronenplatz (U)",
     lat: 49.00935564,
     lon: 8.40998277,
-    type: "ubahn"
+    type: ["ubahn", "tram"],
+    lines: ["S2", "S4", "S5", "S51", "S7", "S71", "S8", "1", "2"]
   },
   {
     name: "KA Marktplatz (Kaiserstraße U)",
     lat: 49.009651,
     lon: 8.402687,
-    type: "ubahn"
+    type: ["ubahn", "tram"],
+    lines: ["S1", "S11", "S2", "S5", "S51", "1"]
   },
   {
     name: "KA Europaplatz (U)",
     lat: 49.01006861,
     lon: 8.39371428,
-    type: ["ubahn", "tram", "sbahn"]
+    type: ["ubahn", "tram"],
+     lines: ["S1", "S11", "S2", "S5", "S51", "1"]
   },
   {
     name: "Karlsruhe Starckstraße",
     lat: 49.01640242,
     lon: 8.35288585,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "KA Marktplatz (Pyramide U)",
     lat: 49.0083009,
     lon: 8.40376643,
-    type: "ubahn"
-  },
+    type: ["ubahn", "tram"],
+    lines: ["S1", "S11", "S4", "S7", "S71", "S8", "2"]
+    },
   {
     name: "KA Ettlinger Tor/Staatstheater (U)",
     lat: 49.0050776,
     lon: 8.40343406,
-    type: "ubahn"
+    type: ["ubahn", "tram"],
+    lines: ["S1", "S11", "S4", "S7", "S71", "S8", "2"]
   },
   {
     name: "Karlsruhe Kongresszentrum (U)",
     lat: 49.00217232,
     lon: 8.40311066,
-    type: "ubahn"
+    type: ["ubahn", "tram"],
+    lines: ["S1", "S11", "S4", "S7", "S71", "S8", "2"]
   },
   {
     name: "Karlsruhe Vogesenbrücke",
@@ -1857,73 +1865,74 @@ const haltepunkte = [
     name: "Karlsruhe Mühlburg West",
     lat: 49.0204792,
     lon: 8.3505682,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Knielingen Siemens",
     lat: 49.02520949,
     lon: 8.34633714,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Knielingen Herweghstraße",
     lat: 49.03066968,
     lon: 8.34096521,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Knielingen Eggensteiner Straße",
     lat: 49.03350851,
     lon: 8.33821637,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Knielingen Rheinbergstraße",
     lat: 49.03534011,
     lon: 8.33615922,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Durlach Auer Str./Dr. Schwabe",
     lat: 49.00052809,
     lon: 8.46315406,
-    type: "bus"
+    type: "tram",
+    lines: ["1", "2"]
   },
   {
     name: "KA Moltkestr./Städt. Klinikum",
     lat: 49.01571311,
     lon: 8.37517306,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "KA Knielinger Allee/Städt. Klinikum",
     lat: 49.01884735,
     lon: 8.37540662,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Karlsruhe August-Bebel-Straße",
     lat: 49.02416097,
     lon: 8.37578391,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Karlsruhe Kurt-Schumacher-Str.",
     lat: 49.03027506,
     lon: 8.37630493,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Karlsruhe Haus Bethlehem",
     lat: 49.03310213,
     lon: 8.37661934,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Neureut Welschneureuter Straße",
     lat: 49.04481508,
     lon: 8.37470593,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Neureut Welschn. Straße (Ersatzhalt)",
@@ -1935,13 +1944,13 @@ const haltepunkte = [
     name: "Neureut Bärenweg",
     lat: 49.0470231,
     lon: 8.37856869,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Neureut Adolf-Ehrmann-Bad",
     lat: 49.0508501,
     lon: 8.3852791,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Neureut Adolf-Ehrmann-Bad (Ersatzhalt)",
@@ -1953,7 +1962,7 @@ const haltepunkte = [
     name: "Neureut Kirchfeld",
     lat: 49.05300486,
     lon: 8.38907898,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Neureut Kirchfeld (Ersatzhalt)",
@@ -1965,13 +1974,14 @@ const haltepunkte = [
     name: "Karlsruhe Duale Hochschule",
     lat: 49.02725345,
     lon: 8.3861864,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Albtalbahnhof",
     lat: 48.99356158,
     lon: 8.39596007,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S1", "S11", "S4", "S7", "S8"]
   },
   {
     name: "Karlsruhe Albtalbahnhof (Ersatzhalt)",
@@ -1983,31 +1993,31 @@ const haltepunkte = [
     name: "Karlsruhe Dammerstock",
     lat: 48.98468407,
     lon: 8.40364067,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Karlsruhe Schloss Rüppurr",
     lat: 48.98147103,
     lon: 8.40379338,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Rüppurr Ostendorfplatz",
     lat: 48.97598775,
     lon: 8.40664104,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Rüppurr Tulpenstraße",
     lat: 48.97134124,
     lon: 8.40405389,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Rüppurr Battstraße",
     lat: 48.96570351,
     lon: 8.40477255,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Karlsruhe Erlenweg",
@@ -2043,19 +2053,21 @@ const haltepunkte = [
     name: "Neureut-Heide",
     lat: 49.03680063,
     lon: 8.38820761,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Hubstraße",
     lat: 49.00722845,
     lon: 8.47248755,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S5", "S51"]
   },
   {
     name: "Grötzingen",
     lat: 49.00606759,
     lon: 8.49293321,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4", "S5", "S51"]
   },
   {
     name: "Grötzingen Bahnhof",
@@ -2067,7 +2079,8 @@ const haltepunkte = [
     name: "Grötzingen Oberausstraße",
     lat: 49.00518367,
     lon: 8.50391062,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4", "S5", "S51"]
   },
   {
     name: "Grötzingen Hl.-Kreuz-Kirche",
@@ -2085,7 +2098,7 @@ const haltepunkte = [
     name: "Grötzingen Krappmühlenweg",
     lat: 49.00586724,
     lon: 8.51269614,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Grötzingen Im Sonnental",
@@ -2097,25 +2110,27 @@ const haltepunkte = [
     name: "Durlach Schlossplatz",
     lat: 48.99911954,
     lon: 8.47355655,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Maxau",
     lat: 49.03598204,
     lon: 8.30783534,
-    type: "bus"
+    type: ["stadtbahn", "bahn"]
   },
   {
     name: "Durlach Turmberg",
     lat: 48.99987391,
     lon: 8.47851525,
-    type: "bus"
+    type: "tram",
+    lines: ["1", "8"]
   },
   {
     name: "Durlach Karl-Weysser-Straße",
     lat: 48.99867752,
     lon: 8.47671862,
-    type: "bus"
+    type: "tram",
+    lines: ["1", "8"]
   },
   {
     name: "Durlach Friedhof",
@@ -2139,7 +2154,7 @@ const haltepunkte = [
     name: "Karlsruhe Eckenerstraße",
     lat: 49.00576117,
     lon: 8.35044244,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Grötzingen LTZ Augustenberg",
@@ -2151,31 +2166,31 @@ const haltepunkte = [
     name: "Karlsruhe Rheinhafenstraße",
     lat: 49.00138852,
     lon: 8.34489983,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Daxlanden Thomas-Mann-Straße",
     lat: 48.99922563,
     lon: 8.3415581,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Daxlanden Karl-Delisle-Straße",
     lat: 48.99576009,
     lon: 8.33778517,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Daxlanden Dornröschenweg",
     lat: 48.99251829,
     lon: 8.33506328,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Daxlanden Nussbaumweg",
     lat: 48.9891466,
     lon: 8.33300614,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "KA-Grötzingen Emil-Arheit-Halle",
@@ -2307,37 +2322,37 @@ const haltepunkte = [
     name: "Hagsfeld Süd",
     lat: 49.02421988,
     lon: 8.44912237,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Hagsfeld Geroldsäcker",
     lat: 49.03290777,
     lon: 8.45535668,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Knielingen Sudetenstraße",
     lat: 49.0305401,
     lon: 8.34512441,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Knielingen Pionierstraße",
     lat: 49.03348495,
     lon: 8.34808885,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Knielingen Egon-Eiermann-Allee",
     lat: 49.03598204,
     lon: 8.35015498,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Knielingen Nord",
     lat: 49.03774288,
     lon: 8.34778342,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Rheinhafen Nord",
@@ -2349,7 +2364,8 @@ const haltepunkte = [
     name: "KA Durlacher Tor/KIT-Campus Süd",
     lat: 49.00893728,
     lon: 8.41777117,
-    type: "bus"
+    type: ["tram", "bus"],
+     lines: ["4", "5"]
   },
   {
     name: "Karlsruhe Studentenhaus",
@@ -2397,19 +2413,19 @@ const haltepunkte = [
     name: "Waldstadt Elbinger Straße West",
     lat: 49.04124083,
     lon: 8.43845039,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Waldstadt Europäische Schule",
     lat: 49.04479742,
     lon: 8.44679573,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Hagsfeld Reitschulschlag",
     lat: 49.04252453,
     lon: 8.46080047,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Karlsruhe Emil-Gött-Straße",
@@ -2427,55 +2443,55 @@ const haltepunkte = [
     name: "Daxlanden Mauerweg",
     lat: 49.00780593,
     lon: 8.33900688,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Daxlanden Ankerstraße",
     lat: 49.00649187,
     lon: 8.33441649,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Daxlanden Kirchplatz",
     lat: 49.00541349,
     lon: 8.33177545,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Daxlanden Hammweg",
     lat: 49.0039049,
     lon: 8.32670895,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Daxlanden Waidweg",
     lat: 49.00438223,
     lon: 8.32210957,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Daxlanden Altrheinbrücke",
     lat: 49.00085812,
     lon: 8.31190471,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Daxlanden Rappenwört",
     lat: 48.99919026,
     lon: 8.29530384,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Dunantstraße",
     lat: 49.01145918,
     lon: 8.43575544,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Hagsfeld Bahnhof",
     lat: 49.02722989,
     lon: 8.45373073,
-    type: ["bahn", "stadtbahn"]
+    type: ["sbahn", "stadtbahn", "bahn"]
   },
   {
     name: "Hagsfeld Oberdorfstraße",
@@ -2583,19 +2599,19 @@ const haltepunkte = [
     name: "Rintheim Forststraße",
     lat: 49.01395148,
     lon: 8.44198975,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Rintheim",
     lat: 49.01629048,
     lon: 8.44376841,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Stadtwerke",
     lat: 49.00711649,
     lon: 8.34399253,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Grötzingen Paul-Rein-Straße",
@@ -2661,7 +2677,7 @@ const haltepunkte = [
     name: "Hagsfeld Jenaer Straße",
     lat: 49.03573469,
     lon: 8.45612923,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Hagsfeld Hallesche Allee",
@@ -2691,7 +2707,7 @@ const haltepunkte = [
     name: "Karlsruhe Kaiserplatz",
     lat: 49.01018057,
     lon: 8.38835134,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Mühlburger Tor",
@@ -2709,7 +2725,7 @@ const haltepunkte = [
     name: "Karlsruhe Schillerstraße",
     lat: 49.00975632,
     lon: 8.37965565,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Raiherwiesenstraße",
@@ -2733,67 +2749,67 @@ const haltepunkte = [
     name: "Karlsruhe Karl-Wilhelm-Platz",
     lat: 49.01124117,
     lon: 8.42295445,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Hauptfriedhof",
     lat: 49.01360975,
     lon: 8.4292157,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "KA Hirtenweg/Technologiepark",
     lat: 49.01709173,
     lon: 8.43866598,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Rintheim Sinsheimer Straße",
     lat: 49.02072662,
     lon: 8.44465774,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
-    name: "Hagsfeld Fächerbad",
+    name: "Waldstadt Fächerbad",
     lat: 49.02530963,
     lon: 8.44805338,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Waldstadt Im Eichbäumle",
     lat: 49.02957416,
     lon: 8.4478288,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Waldstadt Glogauer Straße",
     lat: 49.03171217,
     lon: 8.44178314,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Waldstadt Zentrum",
     lat: 49.03501031,
     lon: 8.44507995,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Waldstadt Jägerhaus",
     lat: 49.0368183,
     lon: 8.44691252,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Yorckstraße",
     lat: 49.01095834,
     lon: 8.37535272,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Waldstadt Osteroder Straße",
     lat: 49.04319581,
     lon: 8.44765812,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Kapellenstraße",
@@ -2889,7 +2905,7 @@ const haltepunkte = [
     name: "Karlsruhe Händelstraße",
     lat: 49.01124706,
     lon: 8.36904655,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Durlach Dürrenwettersbacher Str.",
@@ -2931,55 +2947,55 @@ const haltepunkte = [
     name: "Durlach Zündhütle",
     lat: 48.98280343,
     lon: 8.46010877,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Schlesier Straße West",
     lat: 48.98875755,
     lon: 8.45221258,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Ostmarkstraße",
     lat: 48.99226483,
     lon: 8.45360496,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Ellmendinger Straße",
     lat: 48.99427478,
     lon: 8.45896791,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Steiermärker Straße",
     lat: 48.98591617,
     lon: 8.45579685,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Killisfeldstraße",
     lat: 48.99716873,
     lon: 8.46184252,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Gritznerstraße",
     lat: 48.99946137,
     lon: 8.46416017,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Philippstraße",
     lat: 49.01144739,
     lon: 8.36416869,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Wolfartsweier Nord",
     lat: 48.97915398,
     lon: 8.45884214,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Durlach Parkschlössle",
@@ -3153,7 +3169,7 @@ const haltepunkte = [
     name: "Karlsruhe Barbarossaplatz",
     lat: 48.99500565,
     lon: 8.38883643,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Gebhardstraße",
@@ -3231,37 +3247,37 @@ const haltepunkte = [
     name: "Karlsruhe Mühlburger Feld",
     lat: 49.00784717,
     lon: 8.36381835,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Kühler Krug",
     lat: 49.00633866,
     lon: 8.36654923,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Hübschstraße",
     lat: 49.00559028,
     lon: 8.37192116,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Lessingstraße",
     lat: 49.0044117,
     lon: 8.3838418,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Otto-Sachs-Straße",
     lat: 49.00339221,
     lon: 8.3895461,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Entenfang",
     lat: 49.01054,
     lon: 8.35916508,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Karlsruhe Konzerthaus",
@@ -3309,7 +3325,7 @@ const haltepunkte = [
     name: "KA Kußmaulstr./Städt. Klinikum",
     lat: 49.0169739,
     lon: 8.36911841,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Hertzstraße",
@@ -3321,19 +3337,19 @@ const haltepunkte = [
     name: "Karlsruhe Feierabendweg",
     lat: 49.02199318,
     lon: 8.36055747,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Neureuter Straße",
     lat: 49.02373095,
     lon: 8.35733252,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Knielingen Siemensallee",
     lat: 49.0278837,
     lon: 8.34981362,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Südendschule",
@@ -3381,13 +3397,14 @@ const haltepunkte = [
     name: "Karlsruhe Lameyplatz",
     lat: 49.01322678,
     lon: 8.35447587,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Karlsruhe Gottesauer Platz/BGV",
     lat: 49.00757612,
     lon: 8.42455345,
-    type: "bus"
+    type: ["stadtbahn", "tram"],
+     lines: ["S2", "S4", "S5", "S51", "S7", "S71", "S8", "1", "2"]
   },
   {
     name: "Karlsruhe Blohnstraße",
@@ -3471,7 +3488,7 @@ const haltepunkte = [
     name: "Karlsruhe Sophienstraße",
     lat: 49.0075113,
     lon: 8.37906276,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Pfannkuchstraße",
@@ -3483,61 +3500,61 @@ const haltepunkte = [
     name: "Karlsruhe Weinbrennerplatz",
     lat: 49.00513653,
     lon: 8.37783207,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Landesbausparkasse",
     lat: 49.00136495,
     lon: 8.37750868,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "KA Europahalle/Europabad",
     lat: 48.99847714,
     lon: 8.37624205,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Bannwaldallee",
     lat: 48.995153,
     lon: 8.37238828,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Hardecksiedlung",
     lat: 48.99252419,
     lon: 8.36860637,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Oberreut Albert-Braun-Straße",
     lat: 48.98897565,
     lon: 8.36322546,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Oberreut Zentrum",
     lat: 48.98582774,
     lon: 8.36225528,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "KA Karlstor/Bundesgerichtshof",
     lat: 49.00518367,
     lon: 8.39462158,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Oberreut Wilhelm-Leuschner-Str.",
     lat: 48.98333403,
     lon: 8.36520176,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Oberreut Badeniaplatz",
     lat: 48.98195447,
     lon: 8.36824705,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Oberreut Eva-Maria-Buch-Straße",
@@ -3549,7 +3566,7 @@ const haltepunkte = [
     name: "Karlsruhe Mathystraße",
     lat: 49.00217232,
     lon: 8.39432514,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Durmersheimer Straße",
@@ -3585,7 +3602,7 @@ const haltepunkte = [
     name: "Karlsruhe Philipp-Reis-Straße",
     lat: 49.00448831,
     lon: 8.41089906,
-    type: "bus"
+    type: "butrams"
   },
   {
     name: "Karlsruhe Schwimmschulweg",
@@ -3615,13 +3632,13 @@ const haltepunkte = [
     name: "Karlsruhe Welfenstraße",
     lat: 48.99532982,
     lon: 8.38492876,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Ostendstraße",
     lat: 49.00513653,
     lon: 8.41601047,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Daxlanden A.-Dosenbach-Straße",
@@ -3663,55 +3680,56 @@ const haltepunkte = [
     name: "Karlsruhe Wolfartsweierer Str.",
     lat: 49.0035631,
     lon: 8.42306224,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Schloss Gottesaue",
     lat: 49.0036515,
     lon: 8.426925,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Essenweinstraße",
     lat: 49.0093144,
     lon: 8.43186573,
-    type: "bus"
+    type: ["stadtbahn", "tram"]
   },
   {
     name: "Karlsruhe Kolpingplatz",
     lat: 48.99773453,
     lon: 8.39380412,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Arbeitsagentur",
     lat: 49.00391669,
     lon: 8.38649183,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe ZKM",
     lat: 48.9997973,
     lon: 8.3860786,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "KA Tullastraße/Alter Schlachthof",
     lat: 49.00629152,
     lon: 8.43165014,
-    type: "bus"
+    type: ["stadtbahn", "tram"],
+     lines: ["S2", "S4", "S5", "S51", "S7", "S71", "S8", "1", "2", "5"]
   },
   {
     name: "Karlsruhe Kunstakademie/Hochschule",
     lat: 49.01461725,
     lon: 8.38562945,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Heidehof",
     lat: 49.03167683,
     lon: 8.38712065,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Neureut Flughafenstraße",
@@ -3789,7 +3807,8 @@ const haltepunkte = [
     name: "KA Ettlinger Tor/Staatstheater",
     lat: 49.0054842,
     lon: 8.40222133,
-    type: "tram"
+    type: "tram",
+    lines: ["4", "5"]
   },
   {
     name: "Karlsruhe Ohiostraße",
@@ -3945,7 +3964,8 @@ const haltepunkte = [
     name: "Karlsruhe Augartenstraße",
     lat: 48.99847124,
     lon: 8.40371253,
-    type: "bus"
+    type: ["stadtbahn", "tram"],
+    lines: ["S1", "S11", "S4", "S7", "S71", "S8", "2"]
   },
   {
     name: "Karlsruhe Stresemannstraße",
@@ -4047,13 +4067,14 @@ const haltepunkte = [
     name: "Karlsruhe Lilienthalstraße",
     lat: 49.0226824,
     lon: 8.3852252,
-    type: "bus"
+    type: "tram"
   },
   {
     name: "Karlsruhe Kronenplatz",
     lat: 49.00868391,
     lon: 8.41003667,
-    type: "bus"
+    type: "tram",
+    lines: ["3"]
   },
   {
     name: "Karlsruhe-Durlach",
@@ -4065,25 +4086,29 @@ const haltepunkte = [
     name: "Durlach Bahnhof",
     lat: 49.00270271,
     lon: 8.46282168,
-    type: "bus"
+    type: ["stadtbahn", "tram"],
+    lines: ["S4", "S5", "S51", "5"]
   },
   {
     name: "Karlsruhe Werderstraße",
     lat: 49.00015091,
     lon: 8.41060261,
-    type: "bus"
+    type: "tram",
+    lines: ["3"]
   },
   {
     name: "Karlsruhe Tivoli",
     lat: 48.99664418,
     lon: 8.41040498,
-    type: "bus"
+    type: "tram",
+    lines: ["3"]
   },
   {
     name: "Karlsruhe Rüppurrer Tor",
     lat: 49.0048242,
     lon: 8.41036905,
-    type: "bus"
+    type: "tram",
+    lines: ["3", "4", "5"]
   },
   {
     name: "Karlsruhe Hauptbahnhof Süd",
@@ -4098,28 +4123,24 @@ const haltepunkte = [
     type: "bus"
   },
   {
-    name: "KA Hauptbahnhof (Vorplatz)",
-    lat: 48.99431604,
-    lon: 8.39916706,
-    type: "bus"
-  },
-  {
     name: "Karlsruhe Hauptbahnhof (Vorplatz)",
-    lat: 48.99461075,
-    lon: 8.39997554,
-    type: "bus"
+    lat: 48.994256,
+    lon: 8.399580,
+    type: ["stadtbahn", "tram", "bus"],
+    lines: ["S1", "S11", "S4", "S7", "S71", "S8", "2", "3"]
   },
   {
     name: "Karlsruhe Weinweg",
     lat: 49.00450009,
     lon: 8.44111838,
-    type: "bus"
+    type: ["stadtbahn", "tram"],
+    lines: ["S4", "S5", "S51", "1", "2", "5"]
   },
   {
     name: "Karlsruhe Hauptbahnhof",
     lat: 48.99331992,
     lon: 8.40139488,
-    type: "bahn"
+    type: ["bahn", "stadtbahn", "tram", "sbahn", "bus"]
   },
   {
     name: "Durlach Turmberg Talstation",
@@ -4167,7 +4188,8 @@ const haltepunkte = [
     name: "Karlsruhe Ebertstraße",
     lat: 48.99458717,
     lon: 8.39467548,
-    type: "bus"
+    type: ["tram", "bus"],
+    lines: ["2", "3"]
   },
   {
     name: "Grünwettersb. H.-Barth-Schule",
@@ -4185,7 +4207,8 @@ const haltepunkte = [
     name: "Karlsruhe Poststraße",
     lat: 48.99504102,
     lon: 8.40306575,
-    type: "bus"
+    type: ["stadtbahn", "tram"],
+    lines: ["S1", "S11", "S4", "S7", "S71", "S8", "2", "3"]
   },
   {
     name: "Karlsruhe Betriebshof West",
@@ -4335,19 +4358,19 @@ const haltepunkte = [
     name: "Ettlingen Neuwiesenreben",
     lat: 48.95315788,
     lon: 8.40073911,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ettlingen Wasen",
     lat: 48.94557116,
     lon: 8.39868197,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ettlingen Erbprinz/Schloss",
     lat: 48.94124043,
     lon: 8.40361372,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ettlingen Erbprinz / Schloss",
@@ -4365,19 +4388,19 @@ const haltepunkte = [
     name: "Ettlingen Stadt",
     lat: 48.93877399,
     lon: 8.40889581,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ettlingen Albgaubad",
     lat: 48.93688573,
     lon: 8.41509419,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ettlingen Spinnerei",
     lat: 48.93473184,
     lon: 8.44172924,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ettlingen Spinnerei (Ersatzhalt)",
@@ -4389,7 +4412,7 @@ const haltepunkte = [
     name: "Busenbach",
     lat: 48.92915489,
     lon: 8.45064951,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Busenbach Bahnhof",
@@ -4426,6 +4449,12 @@ const haltepunkte = [
     lat: 49.03960967,
     lon: 8.68504691,
     type: "bus"
+  },
+  {
+    name: "Diedelsheim",
+    lat: 49.039221,
+    lon: 8.674557,
+    type: "bahn"
   },
   {
     name: "Diedelsheim Rathaus",
@@ -4731,7 +4760,7 @@ const haltepunkte = [
     name: "Etzenrot",
     lat: 48.91409699,
     lon: 8.45765637,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Etzenrot (Ersatzhalt)",
@@ -4749,7 +4778,7 @@ const haltepunkte = [
     name: "Fischweier",
     lat: 48.88823827,
     lon: 8.45131426,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Fischweier (Ersatzhalt)",
@@ -4761,7 +4790,7 @@ const haltepunkte = [
     name: "Marxzell",
     lat: 48.86364267,
     lon: 8.44740659,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Marxzell Bahnhof",
@@ -4773,7 +4802,7 @@ const haltepunkte = [
     name: "Frauenalb - Schielberg",
     lat: 48.83743857,
     lon: 8.44048956,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Frauenalb - Schielberg (Ersatzhalt)",
@@ -4845,13 +4874,13 @@ const haltepunkte = [
     name: "Reichenbach Kurpark",
     lat: 48.91910302,
     lon: 8.47252348,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Reichenbach (b. Ettlingen)",
     lat: 48.92019507,
     lon: 8.47917102,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Reichenbach (Ersatzhalt)",
@@ -4863,25 +4892,25 @@ const haltepunkte = [
     name: "Langensteinbach",
     lat: 48.91539577,
     lon: 8.50311112,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Langensteinbach Bahnhof",
     lat: 48.91559058,
     lon: 8.50331773,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Langensteinbach St. Barbara",
     lat: 48.90982848,
     lon: 8.49993108,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Spielberg (Baden)",
     lat: 48.89775305,
     lon: 8.47461656,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Spielberg (Ersatzhalt)",
@@ -4893,13 +4922,13 @@ const haltepunkte = [
     name: "Ittersbach Industrie",
     lat: 48.88474139,
     lon: 8.50896814,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ittersbach",
     lat: 48.86917965,
     lon: 8.51102528,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Ittersbach Bahnhof",
@@ -4911,7 +4940,7 @@ const haltepunkte = [
     name: "Ittersbach Rathaus",
     lat: 48.86605373,
     lon: 8.5104773,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Neibsheim Kirche",
@@ -4971,7 +5000,7 @@ const haltepunkte = [
     name: "Langensteinbach Schießhüttenäcker",
     lat: 48.92008292,
     lon: 8.49904175,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Neibsheim Fürthstraße",
@@ -5331,7 +5360,7 @@ const haltepunkte = [
     name: "Mörsch Am Hang",
     lat: 48.95688592,
     lon: 8.28528763,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Mörsch Bach-West",
@@ -5343,19 +5372,22 @@ const haltepunkte = [
     name: "Berghausen Hummelberg",
     lat: 49.00979168,
     lon: 8.52690749,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4"]
   },
   {
     name: "Jöhlingen West",
     lat: 49.0311762,
     lon: 8.56901153,
-    type: "bus"
+    type: ["stadtbahn", "bahn"],
+    lines: ["S4", "RE45"]
   },
   {
     name: "Jöhlingen",
     lat: 49.02851984,
     lon: 8.57467092,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4"]
   },
   {
     name: "Jöhlingen Bahnhofstraße",
@@ -5367,19 +5399,22 @@ const haltepunkte = [
     name: "Wössingen",
     lat: 49.01560116,
     lon: 8.60405481,
-    type: "stadtbahn"
+    type: ["stadtbahn"],
+    lines: ["S4"]
   },
   {
     name: "Wössingen Ost",
     lat: 49.01607249,
     lon: 8.61065743,
-    type: "stadtbahn"
+    type: ["stadtbahn", "bahn"],
+    lines: ["S4", "RE45"]
   },
   {
     name: "Dürrenbüchig",
     lat: 49.02398425,
     lon: 8.64818005,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4"]
   },
   {
     name: "Dürrenbüchig (Ersatzhalt)",
@@ -5391,25 +5426,28 @@ const haltepunkte = [
     name: "Bretten-Rinklingen",
     lat: 49.03666518,
     lon: 8.67345865,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4"]
   },
   {
     name: "Bretten",
     lat: 49.0370892,
     lon: 8.69351803,
-    type: "bus"
+    type: ["bahn", "stadtbahn", "bus"],
+    lines: ["S4", "RE45", "MEX17C", "RE71"]
   },
   {
     name: "Bretten Bahnhof",
     lat: 49.03723643,
     lon: 8.69255683,
-    type: "bus"
+    type: ["bus", "stadtbahn", "bahn"]
   },
   {
     name: "Bretten Stadtmitte",
     lat: 49.03389721,
     lon: 8.70293237,
-    type: "bus"
+    type: ["stadtbahn", "bahn"],
+    lines: ["S4", "RE45"]
   },
   {
     name: "Bretten Stadtmitte (Ersatzhalt)",
@@ -5421,25 +5459,29 @@ const haltepunkte = [
     name: "Bretten Wannenweg",
     lat: 49.0304223,
     lon: 8.70939126,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4"]
   },
   {
     name: "Bretten Schulzentrum",
     lat: 49.0318653,
     lon: 8.71849119,
-    type: "bus"
+    type: ["stadtbahn", "bahn"],
+    lines: ["S4", "RE45"]
   },
   {
     name: "Bretten Kupferhälde",
     lat: 49.03710098,
     lon: 8.72369244,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S4"]
   },
   {
     name: "Gölshausen",
     lat: 49.04463844,
     lon: 8.72433024,
-    type: "bus"
+    type: ["stadtbahn", "bahn"],
+    lines: ["S4", "RE45"]
   },
   {
     name: "Gölshausen Steinäcker (Ersatzhalt)",
@@ -5451,31 +5493,35 @@ const haltepunkte = [
     name: "Oberderdingen-Flehingen",
     lat: 49.08394426,
     lon: 8.77504014,
-    type: "bus"
+    type: ["stadtbahn", "bahn"],
+    lines: ["S4", "RE45"]
   },
   {
     name: "Berghausen Pfinzbrücke",
     lat: 49.00649187,
     lon: 8.52086183,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S5", "S51"]
   },
   {
     name: "Söllingen Reetzstraße",
     lat: 48.99050238,
     lon: 8.54102002,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S5", "S51"]
   },
   {
     name: "Söllingen (b. Karlsruhe)",
     lat: 48.98826827,
     lon: 8.54301428,
-    type: "bus"
+    type: "stadtbahn",
+    lines: ["S5", "S51"]
   },
   {
     name: "Kleinsteinbach",
     lat: 48.96680634,
     lon: 8.55490798,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Kleinsteinbach Bahnhof",
@@ -5487,31 +5533,31 @@ const haltepunkte = [
     name: "Söllingen Kapellenstraße",
     lat: 48.98369954,
     lon: 8.54997623,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Berghausen Am Stadion",
     lat: 49.00259074,
     lon: 8.53601641,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Forchheim (b Karlsruhe)",
     lat: 48.96445322,
     lon: 8.3380906,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Helmsheim Bahnhof",
     lat: 49.08602699,
     lon: 8.6515667,
-    type: "bus"
+    type: "bahn"
   },
   {
     name: "Gondelsheim Bahnhof",
     lat: 49.05961575,
     lon: 8.66042409,
-    type: "bus"
+    type: "bahn"
   },
   {
     name: "Ettlingen West",
@@ -5583,13 +5629,13 @@ const haltepunkte = [
     name: "Bruchsal Bahnhof",
     lat: 49.12485329,
     lon: 8.59073279,
-    type: "bus"
+    type: ["stadtbahn", "bahn", "bus"]
   },
   {
     name: "Bruchsal Schlossgarten",
     lat: 49.13120187,
     lon: 8.59395774,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Bruchsal Schlossgarten (Ersatzhalt)",
@@ -5601,7 +5647,7 @@ const haltepunkte = [
     name: "Bruchsal Stegwiesen",
     lat: 49.1366563,
     lon: 8.59832356,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Bad Schönborn-Kronau",
@@ -5613,19 +5659,19 @@ const haltepunkte = [
     name: "Büchig",
     lat: 49.0475589,
     lon: 8.46106996,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Blankenloch Süd",
     lat: 49.05701977,
     lon: 8.46676528,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Blankenloch Mühlenweg",
     lat: 49.06860939,
     lon: 8.47432011,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Forst Buntstift",
@@ -5655,7 +5701,7 @@ const haltepunkte = [
     name: "Berghausen (Baden)",
     lat: 49.0058967,
     lon: 8.53006058,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Berghausen Bahnhof",
@@ -5697,31 +5743,31 @@ const haltepunkte = [
     name: "Forchheim Leichtsandstr./Messe KA",
     lat: 48.98187783,
     lon: 8.32296297,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Forchheim Hallenbad",
     lat: 48.97821062,
     lon: 8.31645019,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Forchheim Hauptstraße",
     lat: 48.97470824,
     lon: 8.31216522,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Forchheim Oberfeldstraße",
     lat: 48.96998494,
     lon: 8.30755687,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Mörsch Rösselsbrünnle",
     lat: 48.96746095,
     lon: 8.30488887,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Forchheim Messe Nord",
@@ -5733,25 +5779,25 @@ const haltepunkte = [
     name: "Mörsch Narzissenstraße",
     lat: 48.96566813,
     lon: 8.30177172,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Mörsch Römerstraße",
     lat: 48.96112681,
     lon: 8.29715437,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Mörsch Rheinaustraße",
     lat: 48.95824257,
     lon: 8.29414502,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Mörsch Merkurstraße",
     lat: 48.95283933,
     lon: 8.2907943,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Söllingen Rathaus",
@@ -6123,19 +6169,19 @@ const haltepunkte = [
     name: "Blankenloch Tolna-Platz",
     lat: 49.060069,
     lon: 8.46922667,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Blankenloch Kirche",
     lat: 49.06448358,
     lon: 8.47131974,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Blankenloch Nord",
     lat: 49.07326449,
     lon: 8.46787021,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Blankenloch Schloss Stutensee",
@@ -6201,7 +6247,7 @@ const haltepunkte = [
     name: "Spöck Hochhaus",
     lat: 49.11148335,
     lon: 8.50020058,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Spöck Siedlungstraße",
@@ -6279,7 +6325,7 @@ const haltepunkte = [
     name: "Blankenloch Bahnhof",
     lat: 49.06631405,
     lon: 8.46513035,
-    type: "bus"
+    type: ["sbahn", "bahn"]
   },
   {
     name: "Karlsdorf Kirche",
@@ -6519,7 +6565,7 @@ const haltepunkte = [
     name: "Spöck Richard-Hecht-Schule",
     lat: 49.11281227,
     lon: 8.50511436,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Bruchsal SEW",
@@ -7095,7 +7141,7 @@ const haltepunkte = [
     name: "Graben-Neudorf",
     lat: 49.1623804,
     lon: 8.48982504,
-    type: "bus"
+    type: ["bus", "sbahn", "bahn"]
   },
   {
     name: "Philippsburg (Baden)",
@@ -7257,7 +7303,7 @@ const haltepunkte = [
     name: "Friedrichstal St-Riquier-Platz",
     lat: 49.10086832,
     lon: 8.47434706,
-    type: "bus"
+    type: ["sbahn", "stadtbahn", "bahn"]
   },
   {
     name: "Karlsdorf Ostendstraße",
@@ -7293,7 +7339,7 @@ const haltepunkte = [
     name: "Friedrichstal Mitte",
     lat: 49.10415598,
     lon: 8.47520945,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Weingarten Seniorenheim",
@@ -7323,7 +7369,7 @@ const haltepunkte = [
     name: "Friedrichstal Nord",
     lat: 49.10857253,
     lon: 8.47640421,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Kirrlach Hinterfeld",
@@ -12087,7 +12133,7 @@ const haltepunkte = [
     name: "Mosbach West",
     lat: 49.34675153,
     lon: 9.13414167,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Mosbach West (Ersatzhalt)",
@@ -12357,7 +12403,7 @@ const haltepunkte = [
     name: "Bad Herrenalb",
     lat: 48.8025593,
     lon: 8.43916005,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Bad Herrenalb Bahnhof",
@@ -12417,7 +12463,7 @@ const haltepunkte = [
     name: "Bad Herrenalb Kullenmühle",
     lat: 48.80875973,
     lon: 8.44384926,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Bernbach Rathaus",

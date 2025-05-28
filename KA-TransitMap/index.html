@@ -16,7 +16,6 @@
       width: 100%;
     }
 
-    /* Suchfeld-Container */
     #search-container {
       position: absolute;
       top: 10px;
@@ -55,10 +54,10 @@
       background-color: #f0f0f0;
     }
 
-  .leaflet-bottom.leaflet-right .leaflet-control-zoom {
-  bottom: 70px !important; /* Abstand über dem 📍-Button */
-  right: 8px !important;
-}
+    .leaflet-bottom.leaflet-right .leaflet-control-zoom {
+      bottom: 70px !important;
+      right: 8px !important;
+    }
   </style>
 </head>
 <body>
@@ -72,36 +71,41 @@
 
   <button id="locate-button" onclick="locateUser()">📍</button>
 
+  <div id="filter-buttons" style="position:absolute; top:70px; left:10px; z-index:1000; background:white; padding:6px 8px; border-radius:5px; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
+    <label><input type="checkbox" class="filter-type" value="bus" checked> Bus</label>
+    <label><input type="checkbox" class="filter-type" value="bahn" checked> Bahn</label>
+    <label><input type="checkbox" class="filter-type" value="tram" checked> Tram</label>
+    <label><input type="checkbox" class="filter-type" value="ubahn" checked> U-Bahn</label>
+    <label><input type="checkbox" class="filter-type" value="sbahn" checked> S-Bahn</label>
+  </div>
+
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
     const map = L.map('map', {
-  zoomControl: false // Zoom-Buttons erst mal deaktivieren
-}).setView([49.009617, 8.403937], 12); //Karlsruhe
+      zoomControl: false
+    }).setView([49.009617, 8.403937], 12);
 
-// Zoom-Control manuell unten rechts hinzufügen
-L.control.zoom({ position: 'bottomright' }).addTo(map);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
     const haltestellenLayer = L.layerGroup().addTo(map);
+    let visibleTypes = new Set(["bus", "bahn", "tram", "ubahn", "sbahn"]);
 
-    // Dynamische Icons
     function createIcon(type, size) {
       const icons = {
-        bus: 'images/bus_logo.png',
         bahn: 'images/db_logo.png',
         tram: 'images/tram_logo.png',
         ubahn: 'images/ubahn_logo.png',
         stadtbahn: 'images/ubahn_logo.png',
-        sbahn: 'images/sbahn_logo.png'
+        sbahn: 'images/sbahn_logo.png',
+        bus: 'images/bus_logo.png'
       };
-
-      const iconUrl = icons[type] || icons.bus;
       return L.icon({
-        iconUrl: iconUrl,
+        iconUrl: icons[type] || icons.bus,
         iconSize: [size, size],
         iconAnchor: [size / 2, size],
         popupAnchor: [0, -size]
@@ -109,48 +113,90 @@ L.control.zoom({ position: 'bottomright' }).addTo(map);
     }
 
     function getIconForType(type, zoom) {
-      const size = zoom >= 15 ? 35 : 20;
+      const size = zoom >= 15 ? 25 : 15;
       return createIcon(type, size);
     }
+
+    // Definiere ein Objekt mit Logos für die wichtigsten Linien (Dateipfade anpassen!)
+    const lineLogos = {
+      "S4": "images/lines/S4_logo.png",
+      "S1": "images/lines/S1_logo.png",
+      "S2": "images/lines/S2_logo.png",
+      "S5": "images/lines/S5_logo.png",
+      "S11": "images/lines/S11_logo.png",
+      "S51": "images/lines/S51_logo.png",
+      "S52": "images/lines/S52_logo.png",
+      "1": "images/lines/tram1_logo.png",
+      "6": "images/lines/tram6_logo.png",
+      "S6": "images/lines/S6_logo.png",
+      "S7": "images/lines/S7_logo.png",
+      "S71": "images/lines/S71_logo.png",
+      "S8": "images/lines/S8_logo.png",
+      "S31": "images/lines/S31_logo.png",
+      "S12": "images/lines/S12_logo.png",
+      // Weitere Linien hier ergänzen
+    };
 
     function updateVisibleMarkers() {
       const bounds = map.getBounds();
       const zoom = map.getZoom();
-      const minZoom = 13;
-
+      const minZoom = 13; //zoom-level zum anzeigen der symbole
       haltestellenLayer.clearLayers();
 
       if (zoom < minZoom) return;
 
       haltepunkte.forEach(hp => {
         const latlng = L.latLng(hp.lat, hp.lon);
-        if (bounds.contains(latlng)) {
-          let icon = getIconForType(Array.isArray(hp.type) ? hp.type[0] : hp.type, zoom);
-const marker = L.marker(latlng, { icon: icon });
+        if (!bounds.contains(latlng)) return;
 
-let popupHTML = `<b>${hp.name}</b><br><div style="margin-top:4px;">`;
+        const types = Array.isArray(hp.type) ? hp.type : [hp.type];
+        const isVisible = types.some(t =>
+          (t === "stadtbahn" || t === "ubahn") ? visibleTypes.has("ubahn") : visibleTypes.has(t)
+        );
 
-const types = Array.isArray(hp.type) ? hp.type : [hp.type];
-types.forEach(t => {
-  const iconSize = zoom >= 15 ? 24 : 16;
-  const iconPath = {
-    bus: 'images/bus_logo_old.png',
-    bahn: 'images/db_logo.png',
-    tram: 'images/tram_logo.png',
-    ubahn: 'images/ubahn_logo.png',
-    sbahn: 'images/sbahn_logo.png',
-    stadtbahn: 'images/ubahn_logo.png'
-  }[t] || 'images/bus_logo.png';
+        if (!isVisible) return;
 
-  popupHTML += `<img src="${iconPath}" alt="${t}" width="${iconSize}" height="${iconSize}" style="margin-right:4px; vertical-align:middle;">`;
-});
+        const icon = getIconForType(types[0], zoom);
+        const marker = L.marker(latlng, { icon: icon });
 
-popupHTML += `</div>`;
+        let popupHTML = `<b>${hp.name}</b><br><div style="margin-top:4px;">`;
 
-marker.bindPopup(popupHTML);
-haltestellenLayer.addLayer(marker);
-          haltestellenLayer.addLayer(marker);
+        // Symbole für die Verkehrstypen (bestehend)
+        types.forEach(t => {
+          const tKey = (t === "stadtbahn") ? "stadtbahn" : t;
+          const iconSize = zoom >= 15 ? 24 : 16;
+          const iconPath = {
+            bus: 'images/bus_logo_old.png',
+            bahn: 'images/db_logo.png',
+            tram: 'images/tram_logo.png',
+            ubahn: 'images/ubahn_logo.png',
+            sbahn: 'images/sbahn.png',
+            stadtbahn: 'images/stadtbahn_logo.png',
+          }[tKey] || 'images/bus_logo.png';
+
+          popupHTML += `<img src="${iconPath}" alt="${t}" width="${iconSize}" height="${iconSize}" style="margin-right:4px; vertical-align:middle;">`;
+        });
+
+        popupHTML += `</div>`;
+
+        // Hier Linien mit Logos anzeigen (neu)
+        if (hp.lines && hp.lines.length > 0) {
+          popupHTML += `<div style="margin-top:6px; font-size: 0.9em; color: #555; display:flex; flex-wrap: wrap; gap:6px; align-items:center;">Linien: `;
+          
+          hp.lines.forEach(line => {
+            if (lineLogos[line]) {
+              popupHTML += `<img src="${lineLogos[line]}" alt="${line}" title="${line}" style="height:15px;"/>`;
+            } else {
+              // Falls kein Logo, Linie als Text anzeigen mit etwas Styling
+              popupHTML += `<span style="padding: 2px 6px; border: 1px solid #888; border-radius: 3px; background:#eee;">${line}</span>`;
+            }
+          });
+          
+          popupHTML += `</div>`;
         }
+
+        marker.bindPopup(popupHTML);
+        haltestellenLayer.addLayer(marker);
       });
     }
 
@@ -159,18 +205,15 @@ haltestellenLayer.addLayer(marker);
 
     // Standortanzeige
     let userLocationMarker = null;
-
     function locateUser() {
       if (!navigator.geolocation) {
         alert("Dein Browser unterstützt keine Standortbestimmung.");
         return;
       }
-
       navigator.geolocation.getCurrentPosition(
         position => {
           const { latitude, longitude } = position.coords;
           const userLatLng = L.latLng(latitude, longitude);
-
           if (userLocationMarker) {
             userLocationMarker.setLatLng(userLatLng);
           } else {
@@ -181,38 +224,40 @@ haltestellenLayer.addLayer(marker);
               fillOpacity: 0.7
             }).addTo(map).bindPopup("📍 Dein Standort").openPopup();
           }
-
           map.setView(userLatLng, 15);
         },
-        error => {
-          alert("Standort konnte nicht ermittelt werden.");
-        }
+        () => alert("Standort konnte nicht ermittelt werden.")
       );
     }
 
     // Suchfunktion
     const searchInput = document.getElementById('search-input');
-
     searchInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         const query = searchInput.value.trim().toLowerCase();
         if (!query) return;
-
-        // Haltestelle suchen (Teilstring-Suche, erstes Ergebnis)
         const result = haltepunkte.find(hp => hp.name.toLowerCase().includes(query));
         if (result) {
           const latlng = L.latLng(result.lat, result.lon);
           map.setView(latlng, 16);
-
-          // Popup anzeigen (Marker existiert nicht zwingend aktuell, daher Popup manuell)
-          L.popup()
-            .setLatLng(latlng)
-            .setContent(`<b>${result.name}</b>`)
-            .openOn(map);
+          L.popup().setLatLng(latlng).setContent(`<b>${result.name}</b>`).openOn(map);
         } else {
           alert("Haltestelle nicht gefunden.");
         }
       }
+    });
+
+    // Filter-Checkboxen
+    document.querySelectorAll('.filter-type').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const type = cb.value;
+        if (cb.checked) {
+          visibleTypes.add(type);
+        } else {
+          visibleTypes.delete(type);
+        }
+        updateVisibleMarkers();
+      });
     });
   </script>
 </body>
