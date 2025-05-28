@@ -113,7 +113,7 @@
     }
 
     function getIconForType(type, zoom) {
-      const size = zoom >= 15 ? 25 : 15;
+      const size = zoom >= 15 ? 30 : 20;
       return createIcon(type, size);
     }
 
@@ -140,7 +140,7 @@
     function updateVisibleMarkers() {
       const bounds = map.getBounds();
       const zoom = map.getZoom();
-      const minZoom = 13; //zoom-level zum anzeigen der symbole
+      const minZoom = 5; //zoom-level zum anzeigen der symbole
       haltestellenLayer.clearLayers();
 
       if (zoom < minZoom) return;
