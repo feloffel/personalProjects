@@ -140,7 +140,7 @@
     function updateVisibleMarkers() {
       const bounds = map.getBounds();
       const zoom = map.getZoom();
-      const minZoom = 5; //zoom-level zum anzeigen der symbole
+      const minZoom = 10; //zoom-level zum anzeigen der symbole
       haltestellenLayer.clearLayers();
 
       if (zoom < minZoom) return;
