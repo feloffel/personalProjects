@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Fahrplanauskunft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .nav-button {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 6px;
+      text-align: center;
+      color: #666;
+      font-size: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .nav-button span {
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .nav-button.active {
+      color: #007aff;
+      background-color: gainsboro;
+    }
+
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 20px;
+      padding-bottom: 84px; /* Platz für Navbar */
+    }
+
+    iframe {
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content">
+    <iframe title="bwegt Fahrplanauskunft-Widget"
+            frameborder="0"
+            width="340"
+            height="512"
+            src="https://www.bwegt.de/efa-widget-v2/index.html">
+    </iframe>
+  </div>
+
+  <nav class="bottom-nav">
+  <button class="nav-button" onclick="window.location.href='index.html'">
+    🗺️
+    <span>Karte</span>
+  </button>
+  <button class="nav-button active" onclick="window.location.href='fahrplanauskunft.html'">
+    🚌
+    <span>Fahrplanauskunft</span>
+  </button>
+  <button class="nav-button" onclick="navigateTo('comingsoon1')">
+    ⚪
+    <span>...</span>
+  </button>
+  <button class="nav-button" onclick="navigateTo('comingsoon2')">
+    ⚪
+    <span>...</span>
+  </button>
+</nav>
+
+</body>
+</html>
