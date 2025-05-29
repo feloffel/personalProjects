@@ -11,6 +11,42 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
+#overlay-menu {
+  position: fixed;
+  top: 0;
+  left: -300px; /* versteckt außerhalb des Bildschirms */
+  width: 280px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  transition: left 0.3s ease;
+  font-family: sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#overlay-menu.open {
+  left: 0;
+}
+
+#overlay-content h2 {
+  margin-top: 0;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+#close-overlay {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #007aff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
 
     .bottom-nav {
   position: fixed;
@@ -76,8 +112,8 @@
 #search-input {
   width: 100%;
   max-width: 600px;
-  padding: 12px 20px;
-  font-size: 16px;
+  padding: 20px 20px;
+  font-size: 25px;
   border: 1px solid #ccc;
   border-radius: 999px; /* Pill-Shape */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -110,22 +146,64 @@
 </head>
 <body>
 
+<div id="overlay-menu">
+  <div id="overlay-content">
+    <h2>Filter</h2>
+    <label><input type="checkbox" class="filter-type" value="bus" checked> Bus</label><br>
+    <label><input type="checkbox" class="filter-type" value="bahn" checked> Bahn</label><br>
+    <label><input type="checkbox" class="filter-type" value="tram" checked> Tram</label><br>
+    <label><input type="checkbox" class="filter-type" value="ubahn" checked> U-Bahn</label><br>
+    <label><input type="checkbox" class="filter-type" value="sbahn" checked> S-Bahn</label><br><br>
+    <button id="close-overlay">✕ Schließen</button>
+  </div>
+</div>
+
+
+
+
   <div id="map"></div>
 
   <!-- Suchfeld -->
-  <div id="search-container">
-    <input id="search-input" type="text" placeholder="Haltestelle suchen..." />
-  </div>
+  <div id="search-container" style="display: flex; align-items: center; justify-content: center;">
+
+  <!-- Burger-Menü-Button links -->
+  <button id="burger-menu" aria-label="Filter anzeigen" 
+          style="
+            width: 65px; height: 65px; border-radius: 50%; border: none;
+            background: #007aff; color: white; font-size: 24px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+          ">
+    ☰
+  </button>
+
+  <input id="search-input" type="text" placeholder="Haltestelle suchen..." />
+
+</div>
 
   <button id="locate-button" onclick="locateUser()">📍</button>
 
-  <div id="filter-buttons" style="position:absolute; top:70px; left:10px; z-index:1000; background:white; padding:6px 8px; border-radius:5px; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
-    <label><input type="checkbox" class="filter-type" value="bus" checked> Bus</label>
-    <label><input type="checkbox" class="filter-type" value="bahn" checked> Bahn</label>
-    <label><input type="checkbox" class="filter-type" value="tram" checked> Tram</label>
-    <label><input type="checkbox" class="filter-type" value="ubahn" checked> U-Bahn</label>
-    <label><input type="checkbox" class="filter-type" value="sbahn" checked> S-Bahn</label>
-  </div>
+  <div id="filter-buttons" style="
+    position: absolute; 
+    top: 60px; 
+    left: 16px; 
+    z-index: 1001; 
+    background: white; 
+    padding: 10px 14px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    display: none;
+    font-family: sans-serif;
+    font-size: 16px;
+    user-select: none;
+  ">
+  <label><input type="checkbox" class="filter-type" value="bus" checked> Bus</label><br>
+  <label><input type="checkbox" class="filter-type" value="bahn" checked> Bahn</label><br>
+  <label><input type="checkbox" class="filter-type" value="tram" checked> Tram</label><br>
+  <label><input type="checkbox" class="filter-type" value="ubahn" checked> U-Bahn</label><br>
+  <label><input type="checkbox" class="filter-type" value="sbahn" checked> S-Bahn</label>
+</div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -318,6 +396,20 @@ function navigateTo(view) {
     // Aktuellen Button hervorheben
     event.currentTarget.classList.add('active');
   }
+
+
+  const burgerMenu = document.getElementById('burger-menu');
+const filterButtons = document.getElementById('filter-buttons');
+
+
+
+document.getElementById('burger-menu').addEventListener('click', () => {
+  document.getElementById('overlay-menu').classList.add('open');
+});
+
+document.getElementById('close-overlay').addEventListener('click', () => {
+  document.getElementById('overlay-menu').classList.remove('open');
+});
 
   </script>
 
