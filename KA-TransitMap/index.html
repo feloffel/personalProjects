@@ -11,53 +11,101 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
+
+    .bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  font-family: sans-serif;
+}
+
+.nav-button {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 6px;
+  text-align: center;
+  color: #666;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.nav-button span {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.nav-button.active {
+  color: #007aff;
+}
+
+.nav-button:focus {
+  outline: none;
+}
+
+
+
     #map {
       height: 100vh;
       width: 100%;
     }
 
     #search-container {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-      background: white;
-      padding: 6px 8px;
-      border-radius: 5px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    }
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+}
 
-    #search-input {
-      width: 220px;
-      padding: 6px 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
+#search-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 999px; /* Pill-Shape */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
 
     #locate-button {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: none;
-      background-color: white;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1000;
-    }
+  position: absolute;
+  bottom: 80px; /* vorher: 20px */
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+}
 
     #locate-button:hover {
       background-color: #f0f0f0;
     }
 
-    .leaflet-bottom.leaflet-right .leaflet-control-zoom {
-      bottom: 70px !important;
-      right: 8px !important;
-    }
+    .leaflet-control-zoom {
+  display: none !important;
+}
   </style>
 </head>
 <body>
@@ -140,7 +188,7 @@
     function updateVisibleMarkers() {
       const bounds = map.getBounds();
       const zoom = map.getZoom();
-      const minZoom = 10; //zoom-level zum anzeigen der symbole
+      const minZoom = 12; //zoom-level zum anzeigen der symbole
       haltestellenLayer.clearLayers();
 
       if (zoom < minZoom) return;
@@ -259,6 +307,42 @@
         updateVisibleMarkers();
       });
     });
+
+
+
+
+function navigateTo(view) {
+    alert("Navigiere zu: " + view);
+    // Hier später Seitenwechsel oder Inhalte anzeigen
+    document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+    // Aktuellen Button hervorheben
+    event.currentTarget.classList.add('active');
+  }
+
   </script>
+
+<!-- Bottom Navigation Bar -->
+<nav class="bottom-nav">
+  <button class="nav-button active" onclick="navigateTo('map')">
+    🗺️
+    <span>Karte</span>
+  </button>
+  <button class="nav-button" onclick="navigateTo('fahrplan')">
+    📆
+    <span>Fahrplan</span>
+  </button>
+  <button class="nav-button" onclick="navigateTo('comingsoon1')">
+    ⚪
+    <span>...</span>
+  </button>
+  <button class="nav-button" onclick="navigateTo('comingsoon2')">
+    ⚪
+    <span>...</span>
+  </button>
+</nav>
+
+
+
+
 </body>
 </html>
