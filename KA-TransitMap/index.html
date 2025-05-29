@@ -102,7 +102,7 @@
   top: 10px;
   left: 0;
   width: 100%;
-  padding: 0 16px;
+  padding: 16px 16px;
   box-sizing: border-box;
   z-index: 1000;
   display: flex;
@@ -119,6 +119,29 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   outline: none;
 }
+
+
+@media (max-width: 600px) {
+  #search-container {
+    padding: 8px;
+  }
+
+  #burger-menu {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  #search-input {
+    font-size: 18px;
+    padding: 14px 16px;
+    max-width: 100%;
+  }
+}
+
 
     #locate-button {
   position: absolute;
@@ -170,7 +193,7 @@
   <button id="burger-menu" aria-label="Filter anzeigen" 
           style="
             width: 65px; height: 65px; border-radius: 50%; border: none;
-            background: #007aff; color: white; font-size: 24px; cursor: pointer;
+            background: green; color: white; font-size: 24px; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             margin-right: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
