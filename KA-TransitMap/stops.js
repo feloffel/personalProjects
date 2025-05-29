@@ -3,25 +3,25 @@ const haltepunkte = [
     name: "Wörth (Rhein) Alte Bahnmeisterei",
     lat: 49.04873645,
     lon: 8.2662164,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Maximiliansau Eisenbahnstraße",
     lat: 49.0373071,
     lon: 8.29789998,
-    type: "bus"
+    type: ["stadtbahn", "bahn"]
   },
   {
     name: "Maximiliansau West",
     lat: 49.03886178,
     lon: 8.29202499,
-    type: "bus"
+    type: ["stadtbahn", "bahn"]
   },
   {
     name: "Wörth (Rhein)",
     lat: 49.04563942,
     lon: 8.27316037,
-    type: "bus"
+    type: ["bahn", "stadtbahn"]
   },
   {
     name: "Wörth Bahnhof",
@@ -33,37 +33,37 @@ const haltepunkte = [
     name: "Wörth (Rhein) Bienwaldhalle",
     lat: 49.04994342,
     lon: 8.26036836,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Wörth (Rhein) Bürgerpark",
     lat: 49.05087953,
     lon: 8.25412507,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Wörth (Rhein) Rathaus",
     lat: 49.05234549,
     lon: 8.24980418,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Wörth (Rhein) Badepark",
     lat: 49.05848554,
     lon: 8.24411784,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Wörth (Rhein) Badallee",
     lat: 49.05597781,
     lon: 8.24992096,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Wörth (Rhein) Zügelstraße",
     lat: 49.05315793,
     lon: 8.26212008,
-    type: "bus"
+    type: ["bahn", "stadtbahn"]
   },
   {
     name: "Rheinzabern Alte Römerstraße",
@@ -237,7 +237,7 @@ const haltepunkte = [
     name: "Jockgrim Bf.",
     lat: 49.09318644,
     lon: 8.27235189,
-    type: "bus"
+    type: ["bahn", "stadtbahn"]
   },
   {
     name: "Jockgrim Bahnhof (Ersatzhalt)",
@@ -4220,7 +4220,7 @@ const haltepunkte = [
     name: "Eggenstein",
     lat: 49.07598319,
     lon: 8.39808908,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Eggenstein (Ersatzhalt)",
@@ -4232,7 +4232,7 @@ const haltepunkte = [
     name: "Eggenstein Spöcker Weg",
     lat: 49.0801963,
     lon: 8.39985876,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Eggenstein Spöcker Weg (Ersatzhalt)",
@@ -4244,13 +4244,13 @@ const haltepunkte = [
     name: "Eggenstein Schweriner Straße",
     lat: 49.08615642,
     lon: 8.40234709,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Eggenstein Süd",
     lat: 49.07145193,
     lon: 8.39622058,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Eggenstein Spargelhof (Ersatzhalt)",
@@ -4262,7 +4262,7 @@ const haltepunkte = [
     name: "Leopoldshafen Viermorgen",
     lat: 49.09045691,
     lon: 8.40023605,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Leopoldshafen Viermorgen (Ersatz)",
@@ -4274,13 +4274,13 @@ const haltepunkte = [
     name: "Leopoldshafen Leopoldstraße",
     lat: 49.09743926,
     lon: 8.4012781,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Leopoldshafen Frankfurter Straße",
     lat: 49.10117415,
     lon: 8.40421559,
-    type: "bus"
+    type: "bstadtbahnus"
   },
   {
     name: "KIT-Campus Nord",
@@ -4292,7 +4292,7 @@ const haltepunkte = [
     name: "Linkenheim Süd",
     lat: 49.11684587,
     lon: 8.41160872,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Linkenheim Süd (Ersatzhalt)",
@@ -4304,7 +4304,7 @@ const haltepunkte = [
     name: "Linkenheim Friedrichstraße",
     lat: 49.11959747,
     lon: 8.40950667,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Linkenheim Friedrichstraße (Ersatz)",
@@ -4316,7 +4316,7 @@ const haltepunkte = [
     name: "Linkenheim Rathaus",
     lat: 49.12331893,
     lon: 8.40826699,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Linkenheim Rathaus (Ersatzhalt)",
@@ -4328,25 +4328,25 @@ const haltepunkte = [
     name: "Linkenheim Schulzentrum",
     lat: 49.12764559,
     lon: 8.41368383,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Hochstetten Grenzstraße",
     lat: 49.1298029,
     lon: 8.41602844,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Hochstetten Altenheim",
     lat: 49.13284767,
     lon: 8.41783405,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Hochstetten",
     lat: 49.13366467,
     lon: 8.41532775,
-    type: "bus"
+    type: "stadtbahn"
   },
   {
     name: "Hochstetten (Ersatzhalt)",
