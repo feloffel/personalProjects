@@ -155,17 +155,16 @@ html, body {
 }
 
 #search-input {
-  height: 80%; /* gleiche Höhe wie Container */
+  height: 60%; /* gleiche Höhe wie Container */
   flex: 1;
   padding: 0 24px;
   font-size: 25px;
   background-color: white;
   /* background-color: rgba(255, 255, 255, 0.1); /* leicht transparent */
   /* backdrop-filter: blur(30px); /* Weichzeichner-Effekt */
-  box-shadow: 2px 0 6px rgba(255, 255, 255, 0.3);
-  border-top: 1px solid #ddd;
-  border-radius: 999px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+border-radius: 999px;
+border:none;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   outline: none;
 }
 
@@ -226,6 +225,27 @@ html, body {
     <label><input type="checkbox" class="filter-type" value="tram" checked> Tram</label><br>
     <label><input type="checkbox" class="filter-type" value="ubahn" checked> U-Bahn</label><br>
     <label><input type="checkbox" class="filter-type" value="sbahn" checked> S-Bahn</label><br><br>
+
+    <label for="line-filter">Nach Linie filtern:</label><br>
+<select id="line-filter">
+  <option value="">– alle Linien –</option>
+  <option value="S1">S1</option>
+  <option value="S2">S2</option>
+  <option value="S4">S4</option>
+  <option value="S5">S5</option>
+  <option value="S6">S6</option>
+  <option value="S7">S7</option>
+  <option value="S8">S8</option>
+  <option value="S11">S11</option>
+  <option value="S12">S12</option>
+  <option value="S31">S31</option>
+  <option value="S51">S51</option>
+  <option value="S52">S52</option>
+  <option value="S71">S71</option>
+  <option value="1">Tram 1</option>
+  <option value="6">Tram 6</option>
+</select>
+<br><br>
     <button id="close-overlay">✕ Schließen</button>
   </div>
 </div>
@@ -245,7 +265,7 @@ html, body {
             color: white; font-size: 24px; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             margin-right: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            
           ">
     ☰
   </button>
@@ -264,7 +284,6 @@ html, body {
     background: white; 
     padding: 10px 14px; 
     border-radius: 8px; 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     display: none;
     font-family: sans-serif;
     font-size: 16px;
