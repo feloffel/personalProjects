@@ -7,6 +7,7 @@
   <link rel="icon" type="image/x-icon" href="/images/favicon.jpeg">
   <link rel="stylesheet" href="styles.css">
   <script src="stops.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -61,14 +62,17 @@ html, body {
   cursor: pointer;
 }
 
-
+.bottom-nav i {
+  font-size: 1.5rem;
+  display: block;
+}
 
     .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 64px;
+  height: 20%;
   background-color: white;
   /* background-color: rgba(255, 255, 255, 0.1); /* leicht transparent */
   /* backdrop-filter: blur(30px); /* Weichzeichner-Effekt */
@@ -482,19 +486,19 @@ document.getElementById('close-overlay').addEventListener('click', () => {
 <!-- Bottom Navigation Bar -->
 <nav class="bottom-nav">
   <button class="nav-button active" onclick="window.location.href='index.html'">
-    🗺️
+    <i class="fas fa-map"></i>
     <span>Karte</span>
   </button>
   <button class="nav-button" onclick="window.location.href='fahrplanauskunft.html'">
-    🚌
+    <i class="fas fa-bus"></i>
     <span>Fahrplanauskunft</span>
   </button>
   <button class="nav-button" onclick="navigateTo('comingsoon1')">
-    ⚪
+    <i class="fas fa-circle-notch"></i>
     <span>...</span>
   </button>
   <button class="nav-button" onclick="navigateTo('comingsoon2')">
-    ⚪
+    <i class="fas fa-circle-notch"></i>
     <span>...</span>
   </button>
 </nav>
