@@ -413,6 +413,22 @@
         async function checkVotingStatus() {
             const messageDiv = document.getElementById('votingMessage');
             
+            // Prüfe ob es einen globalen Reset gab
+            try {
+                const resetDoc = await getDoc(doc(db, 'system', 'lastReset'));
+                if (resetDoc.exists()) {
+                    const lastResetTime = resetDoc.data().timestamp;
+                    const userLockTime = localStorage.getItem('voteLockTime');
+                    
+                    // Wenn der Reset neuer ist als die User-Sperre, entsperre den User
+                    if (userLockTime && lastResetTime > parseInt(userLockTime)) {
+                        localStorage.removeItem('voteLockTime');
+                    }
+                }
+            } catch (error) {
+                console.log('Kein Reset-Timestamp gefunden');
+            }
+            
             if (isVotingLocked()) {
                 const lockTime = parseInt(localStorage.getItem('voteLockTime'));
                 const remainingTime = lockTime - Date.now();
@@ -443,13 +459,25 @@
             if (!selectedImageId || isVotingLocked()) return;
 
             try {
-                const voteRef = doc(db, 'votes', selectedImageId);
+                // Stelle sicher, dass selectedImageId ein String ist
+                const imageIdString = String(selectedImageId);
+                const voteRef = doc(db, 'votes', imageIdString);
                 
-                // Stimme inkrementieren
-                await setDoc(voteRef, {
-                    imageId: selectedImageId,
-                    count: increment(1)
-                }, { merge: true });
+                // Prüfe ob Dokument existiert
+                const voteDoc = await getDoc(voteRef);
+                
+                if (voteDoc.exists()) {
+                    // Dokument existiert - inkrementieren
+                    await updateDoc(voteRef, {
+                        count: increment(1)
+                    });
+                } else {
+                    // Dokument existiert nicht - erstellen
+                    await setDoc(voteRef, {
+                        imageId: imageIdString,
+                        count: 1
+                    });
+                }
 
                 // User sperren
                 const lockTime = Date.now() + LOCK_DURATION;
@@ -566,8 +594,13 @@
                 
                 await Promise.all(deletePromises);
                 
+                // Speichere Reset-Timestamp um alle User zu entsperren
+                await setDoc(doc(db, 'system', 'lastReset'), {
+                    timestamp: Date.now()
+                });
+                
                 hideFinalConfirmation();
-                alert('✓ Abstimmung wurde erfolgreich zurückgesetzt!');
+                alert('✓ Abstimmung wurde erfolgreich zurückgesetzt! Alle Nutzer können nun erneut abstimmen.');
                 await loadResults();
             } catch (error) {
                 console.error('Fehler beim Zurücksetzen:', error);
