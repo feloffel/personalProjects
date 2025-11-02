@@ -368,11 +368,34 @@
             document.getElementById('votingLoading').style.display = 'block';
             document.getElementById('imageGrid').style.display = 'none';
             
+            // ZUERST Reset prüfen und ggf. User entsperren
+            await checkForReset();
+            
             await renderImages();
             await checkVotingStatus();
             
             document.getElementById('votingLoading').style.display = 'none';
             document.getElementById('imageGrid').style.display = 'grid';
+        }
+
+        // Prüfe ob es einen Reset gab und entsperre User
+        async function checkForReset() {
+            try {
+                const resetDoc = await getDoc(doc(db, 'system', 'lastReset'));
+                if (resetDoc.exists()) {
+                    const lastResetTime = resetDoc.data().timestamp;
+                    const userVotedTime = localStorage.getItem('userVotedTime');
+                    
+                    // Wenn der Reset neuer ist als die letzte Abstimmung, entsperre
+                    if (userVotedTime && lastResetTime > parseInt(userVotedTime)) {
+                        console.log('Reset erkannt - User wird entsperrt');
+                        localStorage.removeItem('voteLockTime');
+                        localStorage.removeItem('userVotedTime');
+                    }
+                }
+            } catch (error) {
+                console.log('Fehler beim Prüfen des Resets:', error);
+            }
         }
 
         // Bilder rendern
@@ -412,22 +435,6 @@
         // Voting Status prüfen
         async function checkVotingStatus() {
             const messageDiv = document.getElementById('votingMessage');
-            
-            // Prüfe ob es einen globalen Reset gab
-            try {
-                const resetDoc = await getDoc(doc(db, 'system', 'lastReset'));
-                if (resetDoc.exists()) {
-                    const lastResetTime = resetDoc.data().timestamp;
-                    const userLockTime = localStorage.getItem('voteLockTime');
-                    
-                    // Wenn der Reset neuer ist als die User-Sperre, entsperre den User
-                    if (userLockTime && lastResetTime > parseInt(userLockTime)) {
-                        localStorage.removeItem('voteLockTime');
-                    }
-                }
-            } catch (error) {
-                console.log('Kein Reset-Timestamp gefunden');
-            }
             
             if (isVotingLocked()) {
                 const lockTime = parseInt(localStorage.getItem('voteLockTime'));
@@ -482,6 +489,7 @@
                 // User sperren
                 const lockTime = Date.now() + LOCK_DURATION;
                 localStorage.setItem('voteLockTime', lockTime.toString());
+                localStorage.setItem('userVotedTime', Date.now().toString()); // Zeitpunkt der Abstimmung
 
                 const messageDiv = document.getElementById('votingMessage');
                 messageDiv.innerHTML = `
