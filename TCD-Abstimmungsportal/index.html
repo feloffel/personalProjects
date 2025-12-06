@@ -41,20 +41,231 @@
             display: block;
         }
 
-        .presentation-view {
+        /* Presentation Mode */
+        .presentation-mode {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white;
             z-index: 5000;
-            overflow-y: auto;
+            grid-template-rows: 1fr auto;
         }
 
-        .presentation-view.active {
+        .presentation-mode.active {
+            display: grid;
+        }
+
+      /* Standard (Zentrierte Ansicht) */
+        .presentation-mode.center-view {
+            grid-template-columns: 1fr;
+        }
+        
+        /* Split-View (Für Gewinner-Bilder) */
+        .presentation-mode.split-view {
+            grid-template-columns: 40% 60%;
+        }
+
+        .presentation-left {
             display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            background: #f8f9fa;
+        }
+        
+        /* Zentrierung und volle Breite für den Hintergrund in der center-view */
+        .presentation-mode.center-view .presentation-left {
+            /* FIX: Stellt sicher, dass der off-white Hintergrund die volle Breite einnimmt (behebt die weiße Lücke) */
+            grid-column: 1 / -1; 
+            grid-row: 1;
+            /* Zentriert den Inhalt im Center-View */
+            align-items: center;
+            text-align: center;
+        }
+        
+        /* NEUER FIX: Der Content-Div wird auf dem vollen Hintergrund zentriert */
+        .presentation-mode.center-view #presentationContent,
+        .presentation-mode.center-view .presentation-left .presentation-title,
+        .presentation-mode.center-view .presentation-left .presentation-category {
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        
+        /* Linker Inhalt in der split-view (setzt die normalen Grid-Positionen) */
+        .presentation-mode.split-view .presentation-left {
+            grid-column: 1;
+            grid-row: 1;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .presentation-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            background: white;
+        }
+
+        .presentation-mode.center-view .presentation-right {
+            /* Garantiert, dass die rechte Seite keinen Platz wegnimmt, wenn nur Statistik angezeigt wird */
+            display: none;
+        }
+
+        /* Fügt die Grid-Positionierung für Split-View hinzu */
+        .presentation-mode.split-view .presentation-right {
+            grid-column: 2;
+            grid-row: 1;
+            display: flex;
+        }
+
+       /* FIX: Dynamische Bildskalierung für alle Formate */
+        .winner-image-container {
+            /* Behält die volle Größe, um den Platz in presentation-right einzunehmen und zu zentrieren */
+            width: 100%; 
+            height: 100%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* NEU: Der Wrapper, der auf die tatsächliche Bildgröße schrumpft */
+        .winner-image-wrapper {
+            display: inline-block; 
+            max-width: 100%;
+            max-height: 100%;
+            position: relative; /* Ankerpunkt für das Overlay */
+            border-radius: 20px;
+            overflow: hidden; /* Wichtig für saubere Ecken beim Overlay */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); /* Schatten hier behalten */
+        }
+
+        .winner-image {
+            /* Das Bild nimmt die maximale Größe innerhalb des Wrappers ein */
+            max-width: 100%;
+            max-height: 100%; 
+            object-fit: contain; 
+            display: block;
+        }
+
+
+        .presentation-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .presentation-category {
+            font-size: 36px;
+            color: #667eea;
+            margin-bottom: 40px;
+        }
+
+        .stats-display {
+            /* FIX: Begrenzt die maximale Breite der Liste */
+            max-width: 500px;
+            /* width: 100% kann beibehalten werden, um auf kleinen Screens zu skalieren */
+            width: 100%; 
+            /* Sorgt dafür, dass die Liste selbst mittig innerhalb des zentrierten Inhalts erscheint */
+            margin: 20px auto 0 auto; 
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-place {
+            color: #667eea;
+        }
+
+        .stat-votes {
+            color: #333;
+        }
+
+        .winner-info {
+            width: 100%;
+        }
+
+        .winner-badge {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .winner-name {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .winner-stats {
+            font-size: 32px;
+            color: #666;
+        }
+
+        .presentation-controls {
+            /* FIX: Fixierte Positionierung unten links */
+            position: fixed;
+            bottom: 0px; 
+            left: 60px; 
+            
+            /* Layout und Stil */
+            display: flex;
+            justify-content: flex-start; 
+            gap: 15px;
+            padding: 15px 30px; 
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            z-index: 5001; 
+        }
+
+        .control-btn {
+            padding: 15px 30px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .btn {
@@ -149,7 +360,7 @@
 
         .image-card img {
             width: 100%;
-            height: 250px;
+            height: 250px; /* FIX: Feste Höhe für quadratisches Format wiederhergestellt */
             object-fit: cover;
             display: block;
         }
@@ -160,6 +371,8 @@
             text-align: center;
             font-weight: bold;
         }
+
+
 
         .zoom-button {
             position: absolute;
@@ -385,6 +598,54 @@
                 transform: scale(1.1);
             }
         }
+
+        /* NEU: Autor Overlay beim Hover über das Bild */
+        .author-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0; /* Standardmäßig versteckt */
+            transition: opacity 0.3s;
+            pointer-events: none; /* Ignoriert Mausklicks */
+            z-index: 5; /* Stellt sicher, dass es über dem Bildnamen liegt */
+        }
+
+        .image-card:hover .author-overlay {
+            opacity: 1; /* Beim Hover sichtbar */
+        }
+
+
+       /* NEU: Autor-Overlay NUR im Präsentationsmodus */
+        .winner-author-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7); /* Das Overlay selbst */
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            opacity: 0; /* Standardmäßig versteckt */
+            transition: opacity 0.3s;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 10; 
+        }
+
+        .winner-image-wrapper:hover .winner-author-overlay {
+            opacity: 1; /* Beim Hover auf dem Wrapper sichtbar */
+        }
     </style>
 </head>
 <body>
@@ -449,14 +710,13 @@
         <div id="adminView" class="view">
             <div class="admin-header">
                 <h1>📊 Abstimmungsergebnisse</h1>
-                <div style="display: flex; gap: 15px;">
-                    <button class="btn btn-primary" onclick="startPresentation()">
-                        🎬 Präsentation starten
-                    </button>
-                    <button class="btn btn-danger" onclick="showResetModal()">
-                        🗑️ Abstimmung zurücksetzen
-                    </button>
-                </div>
+                <a href="http://127.0.0.1:5500/index.html?presentation">
+                <button class="btn btn-primary">Präsentationsmodus</button>
+                </a>
+                
+                <button class="btn btn-danger" onclick="showResetModal()">
+                    🗑️ Abstimmung zurücksetzen
+                </button>
             </div>
             <div class="total-votes" id="totalVotes">Gesamtstimmen: 0</div>
             <div id="adminLoading" class="loading">Lädt...</div>
@@ -465,31 +725,31 @@
                 <div class="category-section">
                     <h2 class="category-title">🌊 Süßwasser</h2>
                     <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th>Bild</th>
-                                <th>Name</th>
-                                <th>Stimmen</th>
-                                <th>Prozent</th>
-                            </tr>
-                        </thead>
-                        <tbody id="suesswasserResults"></tbody>
-                    </table>
+    <thead>
+        <tr>
+            <th>Bild</th>
+            <th>Name</th>
+            <th>Autor</th> <th>Stimmen</th>
+            <th>Prozent</th>
+        </tr>
+    </thead>
+    <tbody id="suesswasserResults"></tbody>
+</table>
                 </div>
                 
                 <div class="category-section">
                     <h2 class="category-title">🐠 Salzwasser</h2>
-                    <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th>Bild</th>
-                                <th>Name</th>
-                                <th>Stimmen</th>
-                                <th>Prozent</th>
-                            </tr>
-                        </thead>
-                        <tbody id="salzwasserResults"></tbody>
-                    </table>
+                   <table class="results-table">
+    <thead>
+        <tr>
+            <th>Bild</th>
+            <th>Name</th>
+            <th>Autor</th> <th>Stimmen</th>
+            <th>Prozent</th>
+        </tr>
+    </thead>
+    <tbody id="salzwasserResults"></tbody>
+</table>
                 </div>
             </div>
         </div>
@@ -534,20 +794,22 @@
         <div class="fullscreen-name" id="fullscreenName"></div>
     </div>
 
-    <!-- Presentation View -->
-    <div id="presentationView" class="presentation-view">
-        <div class="presentation-container">
-            <div class="presentation-header">
-                <h1>🏆 Die Gewinner</h1>
-                <h2 id="presentationCategory"></h2>
-            </div>
+    <!-- Presentation Mode -->
+    <div id="presentationMode" class="presentation-mode">
+        <div class="presentation-left">
             
+            <h2 class="presentation-category" id="presentationCategory"></h2>
             <div id="presentationContent"></div>
-            
-            <div class="presentation-controls">
-                <button class="presentation-btn" onclick="exitPresentation()">Beenden</button>
-                <button class="presentation-btn" onclick="nextPresentationStep()">Weiter →</button>
-            </div>
+        </div>
+        
+        <div class="presentation-right" id="presentationRight">
+            <!-- Hier wird das Bild angezeigt -->
+        </div>
+        
+        <div class="presentation-controls">
+            <button class="control-btn" id="prevStepBtn" onclick="previousStep()" disabled>← Zurück</button>
+            <button class="control-btn" onclick="exitPresentation()">Beenden</button>
+            <button class="control-btn" onclick="nextStep()">Weiter →</button>
         </div>
     </div>
 
@@ -567,18 +829,18 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const imageData = {
+      const imageData = {
             suesswasser: [
-                { id: 'suess1', name: 'Süßwasser 1', url: 'images/image1.jpg' },
-                { id: 'suess2', name: 'Süßwasser 2', url: 'images/image2.jpg' },
-                { id: 'suess3', name: 'Süßwasser 3', url: 'images/image3.jpg' },
-                { id: 'suess4', name: 'Süßwasser 4', url: 'images/image4.jpg' }
+                { id: 'suess1', name: 'Süßwasser 1', url: 'images/image1.jpg', author: 'Anna Schmidt' },
+                { id: 'suess2', name: 'Süßwasser 2', url: 'images/image2.jpg', author: 'Max Mustermann' },
+                { id: 'suess3', name: 'Süßwasser 3', url: 'images/image3.jpg', author: 'Laura Fischer' },
+                { id: 'suess4', name: 'Süßwasser 4', url: 'images/image4.jpg', author: 'Jonas Müller' }
             ],
             salzwasser: [
-                { id: 'salz1', name: 'Salzwasser 1', url: 'images/image5.jpg' },
-                { id: 'salz2', name: 'Salzwasser 2', url: 'images/image6.jpg' },
-                { id: 'salz3', name: 'Salzwasser 3', url: 'images/image7.jpg' },
-                { id: 'salz4', name: 'Salzwasser 4', url: 'images/image8.jpg' }
+                { id: 'salz1', name: 'Salzwasser 1', url: 'images/image5.jpg', author: 'Lisa Becker' },
+                { id: 'salz2', name: 'Salzwasser 2', url: 'images/image6.jpg', author: 'Tom Schneider' },
+                { id: 'salz3', name: 'Salzwasser 3', url: 'images/image7.jpg', author: 'Sandra Wagner' },
+                { id: 'salz4', name: 'Salzwasser 4', url: 'images/image8.jpg', author: 'Moritz Keller' }
             ]
         };
 
@@ -595,6 +857,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const isAdmin = urlParams.get('admin') !== null;
             const isMulti = urlParams.get('multi') !== null;
+            const isPresentation = urlParams.get('presentation') !== null;
             
             if (isAdmin) {
                 showAdminView();
@@ -602,6 +865,8 @@
             } else if (isMulti) {
                 showMultiVotingView();
                 await initializeMultiVoting();
+            } else if (isPresentation) {
+                await startPresentation();
             } else {
                 showVotingView();
                 await initializeVoting();
@@ -929,7 +1194,7 @@
                 row.innerHTML = `
                     <td><img src="${image.url}" alt="${image.name}"></td>
                     <td>${image.name}</td>
-                    <td><strong>${voteCount}</strong></td>
+                    <td>${image.author}</td> <td><strong>${voteCount}</strong></td>
                     <td>${percentage}%</td>
                 `;
                 suesswasserTbody.appendChild(row);
@@ -946,14 +1211,14 @@
                 salzwasserTotal += votes[img.id] || 0;
             });
             
-            salzwasserImages.forEach(image => {
+           salzwasserImages.forEach(image => {
                 const row = document.createElement('tr');
                 const voteCount = votes[image.id] || 0;
                 const percentage = salzwasserTotal > 0 ? ((voteCount / salzwasserTotal) * 100).toFixed(1) : 0;
                 row.innerHTML = `
                     <td><img src="${image.url}" alt="${image.name}"></td>
                     <td>${image.name}</td>
-                    <td><strong>${voteCount}</strong></td>
+                    <td>${image.author}</td> <td><strong>${voteCount}</strong></td>
                     <td>${percentage}%</td>
                 `;
                 salzwasserTbody.appendChild(row);
@@ -1009,174 +1274,156 @@
             document.getElementById('fullscreenModal').classList.remove('active');
         };
 
-        // Präsentationsmodus
+        // Presentation Mode
         let presentationStep = 0;
         let presentationData = null;
 
-        window.startPresentation = async function() {
+        async function startPresentation() {
             try {
-                // Lade aktuelle Daten
+                // Lade alle Votes
                 const votesSnapshot = await getDocs(collection(db, 'votes'));
                 const votes = {};
+                let totalVotes = 0;
+                
                 votesSnapshot.forEach((docSnapshot) => {
                     votes[docSnapshot.id] = docSnapshot.data().count || 0;
+                    totalVotes += votes[docSnapshot.id];
                 });
 
-                // Erstelle Top 3 für beide Kategorien
-                const suesswasserTop3 = [...imageData.suesswasser]
-                    .map(img => ({...img, votes: votes[img.id] || 0}))
-                    .sort((a, b) => b.votes - a.votes)
-                    .slice(0, 3);
+                // Bereite Daten für beide Kategorien vor
+                const suesswasserData = imageData.suesswasser.map(img => ({
+                    ...img,
+                    votes: votes[img.id] || 0,
+                    percentage: totalVotes > 0 ? ((votes[img.id] || 0) / totalVotes * 100).toFixed(1) : 0
+                })).sort((a, b) => b.votes - a.votes);
 
-                const salzwasserTop3 = [...imageData.salzwasser]
-                    .map(img => ({...img, votes: votes[img.id] || 0}))
-                    .sort((a, b) => b.votes - a.votes)
-                    .slice(0, 3);
-
-                // Berechne Prozente
-                const suesswasserTotal = suesswasserTop3.reduce((sum, img) => sum + img.votes, 0);
-                const salzwasserTotal = salzwasserTop3.reduce((sum, img) => sum + img.votes, 0);
-
-                suesswasserTop3.forEach(img => {
-                    img.percentage = suesswasserTotal > 0 ? ((img.votes / suesswasserTotal) * 100).toFixed(1) : 0;
-                });
-
-                salzwasserTop3.forEach(img => {
-                    img.percentage = salzwasserTotal > 0 ? ((img.votes / salzwasserTotal) * 100).toFixed(1) : 0;
-                });
+                const salzwasserData = imageData.salzwasser.map(img => ({
+                    ...img,
+                    votes: votes[img.id] || 0,
+                    percentage: totalVotes > 0 ? ((votes[img.id] || 0) / totalVotes * 100).toFixed(1) : 0
+                })).sort((a, b) => b.votes - a.votes);
 
                 presentationData = {
-                    suesswasser: suesswasserTop3.reverse(), // 3., 2., 1.
-                    salzwasser: salzwasserTop3.reverse()
+                    suesswasser: suesswasserData.slice(0, 3),
+                    salzwasser: salzwasserData.slice(0, 3),
+                    totalVotes: totalVotes
                 };
 
                 presentationStep = 0;
-                
-                // Verstecke alle anderen Views
-                document.getElementById('votingView').classList.remove('active');
-                document.getElementById('multiVotingView').classList.remove('active');
-                document.getElementById('adminView').classList.remove('active');
-                
-                // Zeige Präsentations-View
-                document.getElementById('presentationView').classList.add('active');
-                
+                document.getElementById('presentationMode').classList.add('active');
                 showPresentationStep();
             } catch (error) {
-                console.error('Fehler beim Starten der Präsentation:', error);
-                alert('Fehler beim Laden der Daten: ' + error.message);
+                console.error('Fehler beim Laden der Präsentation:', error);
+                alert('Fehler beim Laden der Daten');
             }
-        };
+        }
 
         window.exitPresentation = function() {
-            document.getElementById('presentationView').classList.remove('active');
-            document.getElementById('adminView').classList.add('active');
+            document.getElementById('presentationMode').classList.remove('active');
             presentationStep = 0;
             presentationData = null;
+            window.location.href = 'index.html?admin';
         };
 
-        window.nextPresentationStep = function() {
+        window.nextStep = function() {
             presentationStep++;
             showPresentationStep();
         };
 
+        window.previousStep = function() {
+            if (presentationStep > 0) {
+                presentationStep--;
+                showPresentationStep();
+            }
+        };
+
         function showPresentationStep() {
+            const modeDiv = document.getElementById('presentationMode');
             const content = document.getElementById('presentationContent');
             const category = document.getElementById('presentationCategory');
-            
-            console.log('Presentation Step:', presentationStep); // Debug
+            const rightSide = document.getElementById('presentationRight');
+            const prevBtn = document.getElementById('prevStepBtn');
 
-            // Schritt 0: Süßwasser Balkendiagramm
+            // Standard: Center-View und rightSide leeren
+            modeDiv.classList.remove('split-view');
+            modeDiv.classList.add('center-view');
+            rightSide.innerHTML = ''; 
+
+            prevBtn.disabled = presentationStep === 0;
+
+            // Süßwasser Phase
             if (presentationStep === 0) {
+                // Statistiken anzeigen
+                category.textContent = '🌊 Süßwasser - Top 3';
+                content.innerHTML = createStatsDisplay(presentationData.suesswasser);
+            } else if (presentationStep >= 1 && presentationStep <= 3) {
+                // Plätze 3, 2, 1 (Index 2, 1, 0 für sortiertes Array)
+                modeDiv.classList.remove('center-view');
+                modeDiv.classList.add('split-view');
+                
+                const place = 4 - presentationStep; // Step 1 = Platz 3, Step 2 = Platz 2, Step 3 = Platz 1
+                const index = place - 1; // Platz 3 = Index 2, Platz 2 = Index 1, Platz 1 = Index 0
+                
                 category.textContent = '🌊 Süßwasser';
-                const chartHTML = createBarChart(presentationData.suesswasser);
-                content.innerHTML = chartHTML;
-                console.log('Chart HTML created'); // Debug
-                setTimeout(() => {
-                    console.log('Animating bars'); // Debug
-                    animateBars();
-                }, 200);
+                content.innerHTML = createWinnerInfo(presentationData.suesswasser[index], place);
+                rightSide.innerHTML = createWinnerImage(presentationData.suesswasser[index]);
             }
-            // Schritt 1-3: Süßwasser Plätze 3, 2, 1
-            else if (presentationStep >= 1 && presentationStep <= 3) {
-                const index = presentationStep - 1;
-                const winner = presentationData.suesswasser[index];
-                const place = 3 - index;
-                category.textContent = '🌊 Süßwasser';
-                content.innerHTML = createRevealSection(winner, place);
-            }
-            // Schritt 4: Salzwasser Balkendiagramm
+            // Salzwasser Phase
             else if (presentationStep === 4) {
+                // Statistiken anzeigen
+                category.textContent = '🐠 Salzwasser - Top 3';
+                content.innerHTML = createStatsDisplay(presentationData.salzwasser);
+            } else if (presentationStep >= 5 && presentationStep <= 7) {
+                // Plätze 3, 2, 1 (Index 2, 1, 0 für sortiertes Array)
+                modeDiv.classList.remove('center-view');
+                modeDiv.classList.add('split-view');
+                
+                const place = 8 - presentationStep; // Step 5 = Platz 3, Step 6 = Platz 2, Step 7 = Platz 1
+                const index = place - 1; // Platz 3 = Index 2, Platz 2 = Index 1, Platz 1 = Index 0
+                
                 category.textContent = '🐠 Salzwasser';
-                const chartHTML = createBarChart(presentationData.salzwasser);
-                content.innerHTML = chartHTML;
-                setTimeout(() => animateBars(), 200);
+                content.innerHTML = createWinnerInfo(presentationData.salzwasser[index], place);
+                rightSide.innerHTML = createWinnerImage(presentationData.salzwasser[index]);
             }
-            // Schritt 5-7: Salzwasser Plätze 3, 2, 1
-            else if (presentationStep >= 5 && presentationStep <= 7) {
-                const index = presentationStep - 5;
-                const winner = presentationData.salzwasser[index];
-                const place = 3 - index;
-                category.textContent = '🐠 Salzwasser';
-                content.innerHTML = createRevealSection(winner, place);
-            }
-            // Fertig
+            // Ende
             else {
                 exitPresentation();
             }
         }
 
-        function createBarChart(top3) {
-            const reversed = [...top3].reverse(); // Für Anzeige 1., 2., 3.
-            let html = '<div class="bar-chart">';
-            
-            reversed.forEach((item, index) => {
-                const place = 3 - index;
-                html += `
-                    <div class="bar-item">
-                        <div class="bar-label">
-                            <span>${place}. Platz</span>
-                            <span>${item.votes} Stimmen (${item.percentage}%)</span>
-                        </div>
-                        <div class="bar-container">
-                            <div class="bar-fill" data-width="${item.percentage}" style="--target-width: ${item.percentage}%;">
-                                ${item.percentage}%
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            return html;
-        }
-
-        function createRevealSection(winner, place) {
-            const placeClass = place === 1 ? 'gold' : place === 2 ? 'silver' : 'bronze';
-            const medal = place === 1 ? '🥇' : place === 2 ? '🥈' : '🥉';
-            
+        function createStatsDisplay(top3) {
             return `
-                <div class="reveal-section active">
-                    <div class="place-badge ${placeClass}">${medal} ${place}. Platz</div>
-                    <img src="${winner.url}" alt="${winner.name}" class="reveal-image">
-                    <div class="reveal-name">${winner.name}</div>
-                    <div class="reveal-stats">${winner.votes} Stimmen (${winner.percentage}%)</div>
+                <div class="stats-display">
+                    ${top3.map((item, index) => `
+                        <div class="stat-item">
+                            <span class="stat-place">${index + 1}. Platz</span>
+                            <span class="stat-votes">${item.votes} Stimmen</span>
+                        </div>
+                    `).join('')}
                 </div>
             `;
         }
 
-        function animateBars() {
-            const bars = document.querySelectorAll('.bar-fill');
-            console.log('Found bars to animate:', bars.length);
-            
-            bars.forEach((bar, index) => {
-                const targetWidth = bar.getAttribute('data-width');
-                console.log(`Bar ${index}: target width = ${targetWidth}%`);
-                
-                setTimeout(() => {
-                    bar.classList.add('animated');
-                    console.log(`Animating bar ${index} to ${targetWidth}%`);
-                }, 100 * (index + 1));
-            });
+        function createWinnerInfo(winner, place) {
+            const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
+            return `
+                <div class="winner-info">
+                    <div class="winner-badge">${medals[place]} ${place}. Platz</div>
+                    <div class="winner-name">${winner.name}</div>
+                    <div class="winner-stats">${winner.votes} Stimmen</div>
+                </div>
+            `;
+        }
+
+       function createWinnerImage(winner) {
+            return `
+                <div class="winner-image-container">
+                    <div class="winner-image-wrapper">
+                        <img src="${winner.url}" alt="${winner.name}" class="winner-image">
+                        <div class="winner-author-overlay">${winner.author}</div>
+                    </div>
+                </div>
+            `;
         }
 
         init();
