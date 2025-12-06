@@ -414,12 +414,7 @@
             display: flex;
         }
 
-        .fullscreen-modal img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            border-radius: 10px;
-        }
+   
 
         .fullscreen-close {
             position: absolute;
@@ -441,15 +436,95 @@
             background: #f5f5f5;
         }
 
-        .fullscreen-name {
-            position: absolute;
-            bottom: 30px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px 30px;
+        /* Wrapper für den Inhalt */
+        .fullscreen-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Setzt den Inhalt auf maximale Größe */
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        /* Area für Bild und Zoom-Buttons */
+        /* Area für Bild und Zoom-Buttons */
+        .fullscreen-image-area {
+            position: relative;
+            /* Setzt die maximale anfängliche Größe des Containers (sichtbarer Bereich) */
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 90vw; 
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* FIX: overflow: hidden und Hintergrundfarbe entfernt. Zoomen über den Rand ist nun möglich. */
+        }
+        
+        /* Das Bild selbst, auf das der Zoom angewendet wird */
+        .fullscreen-image-zooming {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.2s ease-out;
+            cursor: default;
+            transform-origin: center center; /* Wichtig für das Zoomen */
             border-radius: 10px;
-            font-size: 24px;
+            /* Das Bild wird im JS skaliert, die Standardgröße ist 1.0 */
+        }
+
+        /* Positionierung des Bildnamens (jetzt unter dem Bild) */
+        /* Positionierung des Bildnamens (jetzt unter dem Bild) */
+        .fullscreen-caption {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 30px; /* Mehr Padding */
+            border-radius: 0 0 10px 10px;
+            font-size: 24px; /* Größer */
             font-weight: bold;
             color: #333;
+            margin-top: 0; /* Kein Abstand mehr nach oben, da er direkt unter dem Bild sitzt */
+            text-align: center;
+        }
+
+        /* Positionierung der Zoom-Steuerung */
+       /* NEU: Positionierung der Zoom-Steuerung */
+        .zoom-controls {
+            position: absolute;
+            /* FIX: Platzierung oben mittig im fullscreen-image-area */
+            top: 20px; 
+            left: 50%;
+            transform: translateX(-50%); /* Zentrierung */
+            
+            z-index: 3010;
+            display: flex;
+            gap: 15px; /* Etwas mehr Abstand */
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.7); /* Hintergrund für bessere Prominenz */
+            border-radius: 8px;
+        }
+
+        .zoom-controls button {
+            /* FIX: Größere Buttons und prominenteres Aussehen */
+            background: white; /* Primärfarbe für Buttons */
+            color: black;
+            border: none;
+            border-radius: 6px; /* Quadratischere Form */
+            width: 50px; /* Größer */
+            height: 35px; /* Größer */
+            font-size: 22px; 
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.2s;
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        .zoom-controls button:hover {
+            background: lightgrey; /* Dunklere Hover-Farbe */
         }
 
         .admin-header {
@@ -789,9 +864,9 @@
 
     <!-- Fullscreen Image Modal -->
     <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
-        <button class="fullscreen-close" onclick="closeFullscreen()">✕</button>
-        <img id="fullscreenImage" src="" alt="">
-        <div class="fullscreen-name" id="fullscreenName"></div>
+        <button class="fullscreen-close" onclick="closeFullscreen(event)">✕</button>
+        <div id="fullscreenContent">
+            </div>
     </div>
 
     <!-- Presentation Mode -->
@@ -814,6 +889,9 @@
     </div>
 
     <script type="module">
+        let currentZoom = 1.0; // Start-Zoomfaktor
+        const zoomStep = 0.1; // Schrittweite für Zoom
+
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, increment, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
@@ -834,7 +912,10 @@
                 { id: 'suess1', name: 'Süßwasser 1', url: 'images/image1.jpg', author: 'Anna Schmidt' },
                 { id: 'suess2', name: 'Süßwasser 2', url: 'images/image2.jpg', author: 'Max Mustermann' },
                 { id: 'suess3', name: 'Süßwasser 3', url: 'images/image3.jpg', author: 'Laura Fischer' },
-                { id: 'suess4', name: 'Süßwasser 4', url: 'images/image4.jpg', author: 'Jonas Müller' }
+                { id: 'suess4', name: 'Süßwasser 4', url: 'images/image4.jpg', author: 'Jonas Müller' },
+                { id: 'suess5', name: 'Süßwasser 5', url: 'images/image9.jpeg', author: 'Jonas Müller' },
+                { id: 'suess6', name: 'Süßwasser 6', url: 'images/image10.jpeg', author: 'Jonas Müller' },
+                { id: 'suess7', name: 'Süßwasser 7', url: 'images/image11.jpeg', author: 'Jonas Müller' }
             ],
             salzwasser: [
                 { id: 'salz1', name: 'Salzwasser 1', url: 'images/image5.jpg', author: 'Lisa Becker' },
@@ -1260,18 +1341,82 @@
             }
         };
 
+
+
+
+
+        // Fullscreen Funktionen
+       window.zoomIn = function() {
+            currentZoom += zoomStep;
+            // FIX: Erlaubt mehr Zoomen (Limit auf 5.0 gesetzt, kann bei Bedarf erhöht werden)
+            if (currentZoom > 5.0) { 
+                currentZoom = 5.0;
+            }
+            const img = document.getElementById('zoomingImage');
+            if (img) {
+                img.style.transform = `scale(${currentZoom})`;
+                img.style.cursor = currentZoom > 1.0 ? 'grab' : 'default';
+            }
+        }
+
+        window.zoomOut = function() {
+            currentZoom -= zoomStep;
+            // Begrenzt den minimalen Zoom auf 1.0 (Originalgröße)
+            if (currentZoom < 1.0) {
+                currentZoom = 1.0;
+            }
+            const img = document.getElementById('zoomingImage');
+            if (img) {
+                img.style.transform = `scale(${currentZoom})`;
+                img.style.cursor = currentZoom > 1.0 ? 'grab' : 'default';
+            }
+        }
+
+
+
+
+
+       // Fullscreen Funktionen
         // Fullscreen Funktionen
         window.openFullscreen = function(imageUrl, imageName, event) {
             if (event) {
                 event.stopPropagation(); // Verhindert dass das Bild beim Zoom-Klick ausgewählt wird
             }
-            document.getElementById('fullscreenImage').src = imageUrl;
-            document.getElementById('fullscreenName').textContent = imageName;
-            document.getElementById('fullscreenModal').classList.add('active');
+
+            const fullscreenModal = document.getElementById('fullscreenModal');
+            const fullscreenContent = document.getElementById('fullscreenContent');
+
+            // 1. Zoom-Zustand zurücksetzen
+            currentZoom = 1.0;
+
+            // 2. HTML-Struktur mit Bild, Name und Zoom-Buttons einfügen
+            fullscreenContent.innerHTML = `
+                <div class="fullscreen-content-wrapper">
+                    <div class="fullscreen-image-area">
+                        <img src="${imageUrl}" alt="${imageName}" id="zoomingImage" class="fullscreen-image-zooming">
+                        <div class="zoom-controls">
+                            <button onclick="zoomOut(); event.stopPropagation()">➖</button>
+                            <button onclick="zoomIn(); event.stopPropagation()">➕</button>
+                        </div>
+                    </div>
+                    <div class="fullscreen-caption">${imageName}</div>
+                </div>
+            `;
+            
+            // 3. Zoom-Ansicht aktivieren
+            fullscreenModal.classList.add('active');
+
+            // 4. Transform auf 1.0 setzen
+            document.getElementById('zoomingImage').style.transform = `scale(${currentZoom})`;
+            document.getElementById('zoomingImage').style.cursor = 'default';
         };
 
-        window.closeFullscreen = function() {
+        window.closeFullscreen = function(event) {
+            if (event) {
+                event.stopPropagation(); // Verhindert dass der Klick auf den Schließen-Button das Modal schließt
+            }
             document.getElementById('fullscreenModal').classList.remove('active');
+            document.getElementById('fullscreenContent').innerHTML = ''; // Inhalt leeren
         };
 
         // Presentation Mode
