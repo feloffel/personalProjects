@@ -13,7 +13,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #F2F0EF;
             min-height: 100vh;
             padding: 20px;
         }
@@ -39,6 +39,22 @@
 
         .view.active {
             display: block;
+        }
+
+        .presentation-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 5000;
+            overflow-y: auto;
+        }
+
+        .presentation-view.active {
+            display: flex;
         }
 
         .btn {
@@ -518,20 +534,20 @@
         <div class="fullscreen-name" id="fullscreenName"></div>
     </div>
 
-    <!-- Presentation Mode -->
-    <div id="presentationMode" class="presentation-mode">
+    <!-- Presentation View -->
+    <div id="presentationView" class="presentation-view">
         <div class="presentation-container">
-            <div class="presentation-header" id="presentationHeader">
+            <div class="presentation-header">
                 <h1>🏆 Die Gewinner</h1>
                 <h2 id="presentationCategory"></h2>
             </div>
             
             <div id="presentationContent"></div>
-        </div>
-        
-        <div class="presentation-controls">
-            <button class="presentation-btn" onclick="exitPresentation()">Beenden</button>
-            <button class="presentation-btn" onclick="nextPresentationStep()">Weiter →</button>
+            
+            <div class="presentation-controls">
+                <button class="presentation-btn" onclick="exitPresentation()">Beenden</button>
+                <button class="presentation-btn" onclick="nextPresentationStep()">Weiter →</button>
+            </div>
         </div>
     </div>
 
@@ -1035,16 +1051,25 @@
                 };
 
                 presentationStep = 0;
-                document.getElementById('presentationMode').classList.add('active');
+                
+                // Verstecke alle anderen Views
+                document.getElementById('votingView').classList.remove('active');
+                document.getElementById('multiVotingView').classList.remove('active');
+                document.getElementById('adminView').classList.remove('active');
+                
+                // Zeige Präsentations-View
+                document.getElementById('presentationView').classList.add('active');
+                
                 showPresentationStep();
             } catch (error) {
                 console.error('Fehler beim Starten der Präsentation:', error);
-                alert('Fehler beim Laden der Daten');
+                alert('Fehler beim Laden der Daten: ' + error.message);
             }
         };
 
         window.exitPresentation = function() {
-            document.getElementById('presentationMode').classList.remove('active');
+            document.getElementById('presentationView').classList.remove('active');
+            document.getElementById('adminView').classList.add('active');
             presentationStep = 0;
             presentationData = null;
         };
@@ -1102,26 +1127,27 @@
 
         function createBarChart(top3) {
             const reversed = [...top3].reverse(); // Für Anzeige 1., 2., 3.
-            return `
-                <div class="bar-chart">
-                    ${reversed.map((item, index) => {
-                        const place = 3 - index;
-                        return `
-                            <div class="bar-item">
-                                <div class="bar-label">
-                                    <span>${place}. Platz</span>
-                                    <span>${item.votes} Stimmen (${item.percentage}%)</span>
-                                </div>
-                                <div class="bar-container">
-                                    <div class="bar-fill" data-width="${item.percentage}" style="width: 0%">
-                                        ${item.percentage}%
-                                    </div>
-                                </div>
+            let html = '<div class="bar-chart">';
+            
+            reversed.forEach((item, index) => {
+                const place = 3 - index;
+                html += `
+                    <div class="bar-item">
+                        <div class="bar-label">
+                            <span>${place}. Platz</span>
+                            <span>${item.votes} Stimmen (${item.percentage}%)</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill" data-width="${item.percentage}" style="--target-width: ${item.percentage}%;">
+                                ${item.percentage}%
                             </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
         }
 
         function createRevealSection(winner, place) {
@@ -1140,12 +1166,15 @@
 
         function animateBars() {
             const bars = document.querySelectorAll('.bar-fill');
-            console.log('Found bars:', bars.length); // Debug
+            console.log('Found bars to animate:', bars.length);
+            
             bars.forEach((bar, index) => {
                 const targetWidth = bar.getAttribute('data-width');
-                console.log('Bar', index, 'target width:', targetWidth); // Debug
+                console.log(`Bar ${index}: target width = ${targetWidth}%`);
+                
                 setTimeout(() => {
-                    bar.style.width = targetWidth + '%';
+                    bar.classList.add('animated');
+                    console.log(`Animating bar ${index} to ${targetWidth}%`);
                 }, 100 * (index + 1));
             });
         }
