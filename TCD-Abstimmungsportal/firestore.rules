@@ -1,0 +1,106 @@
+rules_version = '2';
+
+// Firestore-Regeln für das Abstimmungsportal.
+// In der Firebase-Konsole unter Firestore Database → Regeln komplett ersetzen und "Veröffentlichen".
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function cfg() { return get(/databases/$(database)/documents/system/config).data; }
+    function secretKey() { return get(/databases/$(database)/documents/secret/admin).data.key; }
+
+    // Admin = dieses Gerät hat den richtigen Passwort-Hash in admins/{uid} hinterlegt.
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.key == secretKey();
+    }
+
+    function validKey(data) {
+      return data.keys().hasOnly(['key']) && data.key is string && data.key.size() == 64;
+    }
+
+    // Passwort-Hash: von niemandem lesbar. Einmal anlegen (Ersteinrichtung), danach nur Admin ändern.
+    match /secret/admin {
+      allow read, delete: if false;
+      allow create: if signedIn() && validKey(request.resource.data);
+      allow update: if isAdmin() && validKey(request.resource.data);
+    }
+
+    // Admin-Geräte: nur mit dem richtigen Hash anlegbar.
+    match /admins/{uid} {
+      allow read, delete: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && validKey(request.resource.data)
+        && request.resource.data.key == getAfter(/databases/$(database)/documents/secret/admin).data.key;
+    }
+
+    // Einstellungen: alle lesen, nur Admin schreibt.
+    match /system/config {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        // picksSuess/picksSalz: alte Felder aus einer früheren Version, werden ignoriert
+        && request.resource.data.keys().hasOnly(['title', 'round', 'open', 'pointsSuess', 'pointsSalz', 'picksSuess', 'picksSalz'])
+        && request.resource.data.title is string && request.resource.data.title.size() <= 80
+        && request.resource.data.round is int && request.resource.data.round >= 1
+        && request.resource.data.open is bool
+        && request.resource.data.pointsSuess is int && request.resource.data.pointsSuess >= 3 && request.resource.data.pointsSuess <= 9
+        && request.resource.data.pointsSalz is int && request.resource.data.pointsSalz >= 3 && request.resource.data.pointsSalz <= 9;
+      allow delete: if false;
+    }
+
+    // Bilder: alle lesen, nur Admin schreibt.
+    match /photos/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /photoFull/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    // Fotograf:innen: nur Admin (damit die Abstimmung anonym bleibt).
+    match /authors/{id} {
+      allow read, write: if isAdmin();
+    }
+
+    // Stimmzettel: je Kategorie genau 3 Bilder, jedes 1–3 Stimmen, zusammen genau "points" Stimmen.
+    function validPicks(m, points) {
+      let v = m.values();
+      return m is map && m.size() == 3
+        && v[0] is int && v[1] is int && v[2] is int
+        && v[0] >= 1 && v[1] >= 1 && v[2] >= 1
+        && v[0] <= 3 && v[1] <= 3 && v[2] <= 3
+        && v[0] + v[1] + v[2] == points;
+    }
+    function validBallot(c) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['round', 'uid', 'kiosk', 'createdAt', 'suess', 'salz'])
+        && d.round == c.round
+        && d.uid == request.auth.uid
+        && d.kiosk is bool
+        && d.createdAt == request.time
+        && validPicks(d.suess, c.pointsSuess)
+        && validPicks(d.salz, c.pointsSalz);
+    }
+
+    match /ballots/{ballotId} {
+      // Eigenen Stimmzettel nachsehen ("Hast du schon abgestimmt?")
+      allow get: if isAdmin() || (signedIn() && ballotId.matches('[0-9]+_' + request.auth.uid));
+      // Ergebnisse: nur Admin
+      allow list: if isAdmin();
+      // Abstimmen: nur solange offen, genau ein Stimmzettel pro Gerät und Runde.
+      // Mehrfach-Modus: Admin-Gerät darf beliebig viele anlegen.
+      allow create: if signedIn() && cfg().open == true && validBallot(cfg()) && (
+        (ballotId == string(cfg().round) + '_' + request.auth.uid && request.resource.data.kiosk == false)
+        || (isAdmin() && ballotId.matches(string(cfg().round) + '_k_[A-Za-z0-9]{20}') && request.resource.data.kiosk == true)
+      );
+      // Abgegebene Stimmen sind endgültig.
+      allow update, delete: if false;
+    }
+
+    // Alles andere (z. B. alte "votes"-Sammlung vom letzten Jahr) ist gesperrt.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

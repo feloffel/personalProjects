@@ -1,890 +1,238 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <link rel="stylesheet" href="styles.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abstimmungsportal</title>
-   
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a6f8f">
+  <meta name="robots" content="noindex">
+  <title>Fotowettbewerb – Abstimmung</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="js/main.js"></script>
 </head>
 <body>
-    <div class="container">
-        <!-- Voting View -->
-        <div id="votingView" class="view">
-            <h1>Stimme für deine Lieblingsbilder ab</h1>
-            <div class="message info" style="margin-bottom: 20px;">
-                ℹ️ Wähle jeweils 3 Bilder aus jeder Kategorie (insgesamt 6 Bilder)
-            </div>
-            <div id="votingMessage"></div>
-            <div id="votingLoading" class="loading">Lädt...</div>
-            
-            <div id="votingCategories">
-                <div class="category-section">
-                    <h2 class="category-title">🌊 Süßwasser</h2>
-                    <div class="selection-counter" id="suesswasserCounter">Ausgewählt: 0 / 3</div>
-                    <div id="suesswasserGrid" class="image-grid"></div>
-                </div>
-                
-                <div class="category-section">
-                    <h2 class="category-title">🐠 Salzwasser</h2>
-                    <div class="selection-counter" id="salzwasserCounter">Ausgewählt: 0 / 3</div>
-                    <div id="salzwasserGrid" class="image-grid"></div>
-                </div>
-            </div>
-            
-            <button id="submitVote" class="btn btn-success" onclick="submitVote()" disabled>
-                Stimmen abgeben (0 / 6)
-            </button>
-        </div>
+  <!-- Laden -->
+  <section data-view="loading" class="screen center">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Lädt …</p>
+  </section>
 
-        <!-- Multi-User Voting View -->
-        <div id="multiVotingView" class="view">
-            <h1>Mehrfach-Abstimmung</h1>
-            <div class="message info" style="margin-bottom: 20px;">
-                ℹ️ Wähle jeweils 3 Bilder aus jeder Kategorie. Nach jeder Abstimmung 15 Sekunden Wartezeit.
-            </div>
-            <div id="multiVotingMessage"></div>
-            <div id="multiVotingLoading" class="loading">Lädt...</div>
-            
-            <div id="multiVotingCategories">
-                <div class="category-section">
-                    <h2 class="category-title">🌊 Süßwasser</h2>
-                    <div class="selection-counter" id="multiSuesswasserCounter">Ausgewählt: 0 / 3</div>
-                    <div id="multiSuesswasserGrid" class="image-grid"></div>
-                </div>
-                
-                <div class="category-section">
-                    <h2 class="category-title">🐠 Salzwasser</h2>
-                    <div class="selection-counter" id="multiSalzwasserCounter">Ausgewählt: 0 / 3</div>
-                    <div id="multiSalzwasserGrid" class="image-grid"></div>
-                </div>
-            </div>
-            
-            <button id="submitMultiVote" class="btn btn-success" onclick="submitMultiVote()" disabled>
-                Stimmen abgeben (0 / 6)
-            </button>
-        </div>
+  <!-- Fehler / Hinweis ganzseitig -->
+  <section data-view="message" class="screen center" hidden>
+    <div class="message-card">
+      <div class="message-icon" id="messageIcon" aria-hidden="true">⚠️</div>
+      <h1 id="messageTitle">Etwas ist schiefgelaufen</h1>
+      <p id="messageText"></p>
+      <button class="btn" id="messageRetry" type="button">Neu laden</button>
+    </div>
+  </section>
 
-        <!-- Admin View -->
-        <div id="adminView" class="view">
-            <div class="admin-header">
-                <h1>📊 Abstimmungsergebnisse</h1>
-                <a href="https://feloffel.github.io/personalProjects/TCD-Abstimmungsportal/index.html?presentation">
-                <button class="btn btn-primary">Präsentationsmodus</button>
-                </a>
-                
-                <button class="btn btn-danger" onclick="showResetModal()">
-                    🗑️ Abstimmung zurücksetzen
-                </button>
-            </div>
-            <div class="total-votes" id="totalVotes">Gesamtstimmen: 0</div>
-            <div id="adminLoading" class="loading">Lädt...</div>
-            
-            <div id="resultsContainer" style="display: none;">
-                <div class="category-section">
-                    <h2 class="category-title">🌊 Süßwasser</h2>
-                    <table class="results-table">
-    <thead>
-        <tr>
-            <th>Bild</th>
-            <th>Name</th>
-            <th>Autor</th> <th>Stimmen</th>
-            <th>Prozent</th>
-        </tr>
-    </thead>
-    <tbody id="suesswasserResults"></tbody>
-</table>
-                </div>
-                
-                <div class="category-section">
-                    <h2 class="category-title">🐠 Salzwasser</h2>
-                   <table class="results-table">
-    <thead>
-        <tr>
-            <th>Bild</th>
-            <th>Name</th>
-            <th>Autor</th> <th>Stimmen</th>
-            <th>Prozent</th>
-        </tr>
-    </thead>
-    <tbody id="salzwasserResults"></tbody>
-</table>
-                </div>
-            </div>
+  <!-- Abstimmung (Gäste + Mehrfach-Modus) -->
+  <section data-view="vote" hidden>
+    <header class="vote-header">
+      <p class="eyebrow" id="kioskBadge" hidden>Mehrfach-Modus</p>
+      <h1 id="voteTitle">Fotowettbewerb</h1>
+      <p class="lead" id="voteLead">Wähle in jeder Kategorie deine 3 Lieblingsbilder.</p>
+    </header>
+
+    <div id="voteBallot">
+      <div class="vote-sticky">
+        <div class="tabs" role="tablist" aria-label="Kategorie">
+          <!-- per JS befüllt -->
         </div>
+        <p class="budget" id="voteBudget" aria-live="polite"></p>
+      </div>
+      <div id="votePanels"></div>
+
+      <div class="vote-bar">
+        <p class="vote-bar-status" id="voteStatus" aria-live="polite"></p>
+        <button class="btn btn-primary btn-wide" id="voteNext" type="button" disabled>Bilder wählen</button>
+      </div>
     </div>
 
-    <!-- Cooldown Overlay -->
-    <div id="cooldownOverlay" class="cooldown-overlay">
-        <div class="cooldown-timer" id="cooldownTimer">15</div>
-        <div class="cooldown-text">Nächste Abstimmung möglich in</div>
+    <div id="voteState" class="state" hidden>
+      <div class="state-icon" id="voteStateIcon" aria-hidden="true">✓</div>
+      <h2 id="voteStateTitle"></h2>
+      <p id="voteStateText"></p>
+      <div id="voteStatePicks" class="mini-picks"></div>
     </div>
 
-    <!-- Reset Confirmation Modal -->
-    <div id="resetModal" class="modal">
-        <div class="modal-content">
-            <h2>⚠️ Abstimmung zurücksetzen?</h2>
-            <p>Möchten Sie wirklich alle Abstimmungsergebnisse löschen?</p>
-            <p><strong>Diese Aktion kann nicht rückgängig gemacht werden!</strong></p>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="hideResetModal()">Abbrechen</button>
-                <button class="btn btn-danger" onclick="showFinalConfirmation()">Ja, zurücksetzen</button>
-            </div>
-        </div>
+  </section>
+
+  <!-- Admin-Anmeldung -->
+  <section data-view="login" class="screen center" hidden>
+    <form class="login-card" id="loginForm" autocomplete="on">
+      <h1 id="loginTitle">Admin-Bereich</h1>
+      <p id="loginHint" class="muted">Bitte das Admin-Passwort eingeben.</p>
+      <label class="field">
+        <span>Passwort</span>
+        <input type="password" id="loginPassword" autocomplete="current-password" required minlength="6">
+      </label>
+      <label class="field" id="loginRepeatField" hidden>
+        <span>Passwort wiederholen</span>
+        <input type="password" id="loginRepeat" autocomplete="new-password" minlength="6">
+      </label>
+      <p class="form-error" id="loginError" role="alert"></p>
+      <button class="btn btn-primary btn-wide" type="submit" id="loginSubmit">Anmelden</button>
+    </form>
+  </section>
+
+  <!-- Admin -->
+  <section data-view="admin" hidden>
+    <header class="admin-header">
+      <div>
+        <p class="eyebrow">Admin</p>
+        <h1 id="adminTitle">Fotowettbewerb</h1>
+      </div>
+      <nav class="admin-links" aria-label="Modi">
+        <a class="btn" id="linkPresent" href="?presentation">Präsentation</a>
+        <a class="btn" id="linkKiosk" href="?multi">Mehrfach-Modus</a>
+        <a class="btn" id="linkGuest" href="./" target="_blank" rel="noopener">Gäste-Seite</a>
+      </nav>
+    </header>
+
+    <div class="tabs admin-tabs" role="tablist" aria-label="Admin-Bereiche">
+      <button role="tab" type="button" id="tab-results" aria-controls="panel-results" aria-selected="true">Ergebnisse</button>
+      <button role="tab" type="button" id="tab-photos" aria-controls="panel-photos" aria-selected="false" tabindex="-1">Bilder</button>
+      <button role="tab" type="button" id="tab-settings" aria-controls="panel-settings" aria-selected="false" tabindex="-1">Einstellungen</button>
     </div>
 
-    <!-- Final Confirmation Modal -->
-    <div id="finalConfirmModal" class="modal">
-        <div class="modal-content">
-            <h2>🚨 Letzte Bestätigung</h2>
-            <p>Sind Sie sich absolut sicher?</p>
-            <p><strong>Alle Daten werden unwiderruflich gelöscht!</strong></p>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="hideFinalConfirmation()">Abbrechen</button>
-                <button class="btn btn-danger" onclick="resetVoting()">Endgültig löschen</button>
-            </div>
+    <!-- Ergebnisse -->
+    <div role="tabpanel" id="panel-results" aria-labelledby="tab-results" class="admin-panel">
+      <div class="status-card">
+        <div>
+          <p class="status-line"><span class="dot" id="openDot"></span><strong id="openText">Abstimmung offen</strong></p>
+          <p class="muted"><span id="roundText">Runde 1</span> · <span id="ballotCount">0 Stimmzettel</span></p>
         </div>
+        <div class="status-actions">
+          <button class="btn btn-primary" type="button" id="toggleOpen">Abstimmung schließen</button>
+          <button class="btn" type="button" id="exportCsv">CSV</button>
+          <button class="btn btn-danger" type="button" id="newRound">Zurücksetzen</button>
+        </div>
+      </div>
+      <div class="results-grid" id="resultsLists"></div>
     </div>
 
-    <!-- Fullscreen Image Modal -->
-    <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
-        <button class="fullscreen-close" onclick="closeFullscreen(event)">✕</button>
-        <div id="fullscreenContent">
-            </div>
+    <!-- Bilder -->
+    <div role="tabpanel" id="panel-photos" aria-labelledby="tab-photos" class="admin-panel" hidden>
+      <form class="upload-card" id="uploadForm">
+        <h2>Bilder hochladen</h2>
+        <div class="upload-row">
+          <label class="field">
+            <span>Kategorie</span>
+            <select id="uploadCategory"></select>
+          </label>
+          <label class="field grow">
+            <span>Dateien (JPG/PNG, mehrere möglich)</span>
+            <input type="file" id="uploadFiles" accept="image/*" multiple required>
+          </label>
+          <button class="btn btn-primary" type="submit" id="uploadSubmit">Hochladen</button>
+        </div>
+        <p class="muted small">Bilder werden im Browser verkleinert (max. 1600 px) und in Firestore gespeichert. Titel und Fotograf:in kannst du danach unten eintragen.</p>
+        <p class="upload-progress" id="uploadProgress" aria-live="polite"></p>
+      </form>
+      <div id="placeholderBox" class="empty-box" hidden>
+        <p>Noch keine Bilder vorhanden.</p>
+        <button class="btn" type="button" id="importPlaceholders">40 Platzhalter-Bilder aus /images importieren</button>
+      </div>
+      <div id="photoLists"></div>
     </div>
 
-    <!-- Presentation Mode -->
-    <div id="presentationMode" class="presentation-mode">
-        <div class="presentation-left">
-            
-            <h2 class="presentation-category" id="presentationCategory"></h2>
-            <div id="presentationContent"></div>
+    <!-- Einstellungen -->
+    <div role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" class="admin-panel" hidden>
+      <div class="settings-grid">
+        <form class="settings-card" id="settingsForm">
+          <h2>Abstimmung</h2>
+          <label class="field">
+            <span>Titel</span>
+            <input type="text" id="setTitle" maxlength="80" required>
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>Stimmen Süßwasser</span>
+              <input type="number" id="setPointsSuess" min="3" max="9" required>
+            </label>
+            <label class="field">
+              <span>Stimmen Salzwasser</span>
+              <input type="number" id="setPointsSalz" min="3" max="9" required>
+            </label>
+          </div>
+          <p class="muted small">So viele Stimmen verteilt jede Person pro Kategorie auf genau 3 Bilder (jedes Bild 1–3 Stimmen). Bei 6 Stimmen also 3-2-1 oder 2-2-2.</p>
+          <button class="btn btn-primary" type="submit">Speichern</button>
+        </form>
+
+        <div class="settings-card">
+          <h2>Link für Gäste</h2>
+          <div class="qr" id="guestQr"></div>
+          <p class="url-line"><a id="guestUrl" href="./" target="_blank" rel="noopener"></a></p>
         </div>
-        
-        <div class="presentation-right" id="presentationRight">
-            <!-- Hier wird das Bild angezeigt -->
+
+        <form class="settings-card" id="passwordForm">
+          <h2>Admin-Passwort ändern</h2>
+          <label class="field">
+            <span>Neues Passwort</span>
+            <input type="password" id="newPassword" autocomplete="new-password" minlength="6" required>
+          </label>
+          <p class="muted small">Andere angemeldete Admin-Geräte müssen sich danach neu anmelden.</p>
+          <button class="btn" type="submit">Passwort ändern</button>
+        </form>
+
+        <div class="settings-card">
+          <h2>Dieses Gerät</h2>
+          <p class="muted small">Abmelden entfernt die Admin-Rechte nur auf diesem Gerät.</p>
+          <button class="btn" type="button" id="logout">Abmelden</button>
         </div>
-        
-        <div class="presentation-controls">
-            <button class="control-btn" id="prevStepBtn" onclick="previousStep()" disabled>← Zurück</button>
-            <button class="control-btn" onclick="exitPresentation()">Beenden</button>
-            <button class="control-btn" onclick="nextStep()">Weiter →</button>
-        </div>
+      </div>
     </div>
-
-    <script type="module">
-        let currentZoom = 1.0; // Start-Zoomfaktor
-        const zoomStep = 0.1; // Schrittweite für Zoom
-
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, increment, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCdsFT0iYZ7cHtynGpOfislThM789pP2zo",
-            authDomain: "voting-portal-8bde4.firebaseapp.com",
-            projectId: "voting-portal-8bde4",
-            storageBucket: "voting-portal-8bde4.firebasestorage.app",
-            messagingSenderId: "736424824403",
-            appId: "1:736424824403:web:2baed488d9c0f240fe00a6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-      const imageData = {
-            suesswasser: [
-                { id: 'suesswasser1', name: 'Süßwasser 1', url: 'images/Suess_01.jpg', author: 'Sabine Michel' },
-                { id: 'suesswasser2', name: 'Süßwasser 2', url: 'images/Suess_02.jpg', author: 'Markus Dauner' },
-                { id: 'suesswasser3', name: 'Süßwasser 3', url: 'images/Suess_03.jpg', author: 'Frank Rotzinger' },
-                { id: 'suesswasser4', name: 'Süßwasser 4', url: 'images/Suess_04.jpg', author: 'Markus Dauner' },
-                { id: 'suesswasser5', name: 'Süßwasser 5', url: 'images/Suess_05.jpg', author: 'Sabine Michel' },
-                { id: 'suesswasser6', name: 'Süßwasser 6', url: 'images/Suess_06.jpg', author: 'Frank Rotzinger' },
-                { id: 'suesswasser7', name: 'Süßwasser 7', url: 'images/Suess_07.jpg', author: 'Sabine Michel' },
-                { id: 'suesswasser8', name: 'Süßwasser 8', url: 'images/Suess_08.jpg', author: 'Markus Dauner' },
-                { id: 'suesswasser9', name: 'Süßwasser 9', url: 'images/Suess_09.jpg', author: 'Frank Rotzinger' },
-            ],
-            salzwasser: [
-                { id: 'salz1', name: 'Salzwasser 1', url: 'images/Salz_01.jpg', author: 'Manuela Wehlage' },
-                { id: 'salz2', name: 'Salzwasser 2', url: 'images/Salz_02.jpg', author: 'Peter Alexander' },
-                { id: 'salz3', name: 'Salzwasser 3', url: 'images/Salz_03.jpg', author: 'Martin Haschka' },
-                { id: 'salz4', name: 'Salzwasser 4', url: 'images/Salz_04.jpg', author: 'Annette Grimm' },
-                { id: 'salz5', name: 'Salzwasser 5', url: 'images/Salz_05.jpg', author: 'Manfred Grimm' },
-                { id: 'salz6', name: 'Salzwasser 6', url: 'images/Salz_06.jpg', author: 'Joseline Koch' },
-                { id: 'salz7', name: 'Salzwasser 7', url: 'images/Salz_07.jpg', author: 'Manuela Wehlage' },
-                { id: 'salz8', name: 'Salzwasser 8', url: 'images/Salz_08.jpg', author: 'Peter Alexander' },
-                { id: 'salz9', name: 'Salzwasser 9', url: 'images/Salz_09.jpg', author: 'Joseline Koch' },
-                { id: 'salz10', name: 'Salzwasser 10', url: 'images/Salz_10.jpg', author: 'Peter Alexander' },
-                { id: 'salz11', name: 'Salzwasser 11', url: 'images/Salz_11.jpg', author: 'Martin Haschka' },
-                { id: 'salz12', name: 'Salzwasser 12', url: 'images/Salz_12.jpg', author: 'Annette Grimm' },
-                { id: 'salz13', name: 'Salzwasser 13', url: 'images/Salz_13.jpg', author: 'Manfred Grimm' },
-                { id: 'salz14', name: 'Salzwasser 14', url: 'images/Salz_14.jpg', author: 'Manuela Wehlage' },
-                { id: 'salz15', name: 'Salzwasser 15', url: 'images/Salz_15.jpg', author: 'Anne Muck' },
-                { id: 'salz16', name: 'Salzwasser 16', url: 'images/Salz_16.jpg', author: 'Annette Grimm' },
-                { id: 'salz17', name: 'Salzwasser 17', url: 'images/Salz_17.jpg', author: 'Joseline Koch' },
-                { id: 'salz18', name: 'Salzwasser 18', url: 'images/Salz_18.jpg', author: 'Martin Haschka' },
-                { id: 'salz19', name: 'Salzwasser 19', url: 'images/Salz_19.jpg', author: 'Manfred Grimm' },
-                { id: 'salz20', name: 'Salzwasser 20', url: 'images/Salz_20.jpg', author: 'Sabine Michel' },
-                { id: 'salz21', name: 'Salzwasser 21', url: 'images/Salz_21.jpg', author: 'Frank Rotzinger' },
-                { id: 'salz22', name: 'Salzwasser 22', url: 'images/Salz_22.jpg', author: 'Markus Dauner' },
-                { id: 'salz23', name: 'Salzwasser 23', url: 'images/Salz_23.jpg', author: 'Frank Rotzinger' },
-                { id: 'salz24', name: 'Salzwasser 24', url: 'images/Salz_24.jpg', author: 'Markus Dauner' },
-                { id: 'salz25', name: 'Salzwasser 25', url: 'images/Salz_25.jpg', author: 'Volker Schwab' },
-                { id: 'salz26', name: 'Salzwasser 26', url: 'images/Salz_26.jpg', author: 'Sabine Michel' },
-                { id: 'salz27', name: 'Salzwasser 27', url: 'images/Salz_27.jpg', author: 'Frank Rotzinger' },
-                { id: 'salz28', name: 'Salzwasser 28', url: 'images/Salz_28.jpg', author: 'Volker Schwab' },
-                { id: 'salz29', name: 'Salzwasser 29', url: 'images/Salz_29.jpg', author: 'Sabine Michel' },
-                { id: 'salz30', name: 'Salzwasser 30', url: 'images/Salz_30.jpg', author: 'Volker Schwab' },
-                { id: 'salz31', name: 'Salzwasser 31', url: 'images/Salz_31.jpg', author: 'Markus Dauner' },
-            ]
-        };
-
-        let selectedSuesswasser = [];
-        let selectedSalzwasser = [];
-        let selectedMultiSuesswasser = [];
-        let selectedMultiSalzwasser = [];
-        let multiCooldownTimer = null;
-        const LOCK_DURATION = 4 * 60 * 60 * 1000;
-        const MULTI_COOLDOWN = 15;
-        const VOTES_PER_CATEGORY = 3;
-
-        async function init() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const isAdmin = urlParams.get('admin') !== null;
-            const isMulti = urlParams.get('multi') !== null;
-            const isPresentation = urlParams.get('presentation') !== null;
-            
-            if (isAdmin) {
-                showAdminView();
-                await loadResults();
-            } else if (isMulti) {
-                showMultiVotingView();
-                await initializeMultiVoting();
-            } else if (isPresentation) {
-                await startPresentation();
-            } else {
-                showVotingView();
-                await initializeVoting();
-            }
-        }
-
-        function showVotingView() {
-            document.getElementById('votingView').classList.add('active');
-            document.getElementById('adminView').classList.remove('active');
-            document.getElementById('multiVotingView').classList.remove('active');
-        }
-
-        function showAdminView() {
-            document.getElementById('votingView').classList.remove('active');
-            document.getElementById('adminView').classList.add('active');
-            document.getElementById('multiVotingView').classList.remove('active');
-        }
-
-        function showMultiVotingView() {
-            document.getElementById('votingView').classList.remove('active');
-            document.getElementById('adminView').classList.remove('active');
-            document.getElementById('multiVotingView').classList.add('active');
-        }
-
-        async function initializeVoting() {
-            document.getElementById('votingLoading').style.display = 'block';
-            document.getElementById('votingCategories').style.display = 'none';
-            
-            await checkForReset();
-            await renderImages();
-            await checkVotingStatus();
-            
-            document.getElementById('votingLoading').style.display = 'none';
-            document.getElementById('votingCategories').style.display = 'block';
-        }
-
-        async function checkForReset() {
-            try {
-                const resetDoc = await getDoc(doc(db, 'system', 'lastReset'));
-                if (resetDoc.exists()) {
-                    const lastResetTime = resetDoc.data().timestamp;
-                    const userVotedTime = localStorage.getItem('userVotedTime');
-                    
-                    if (userVotedTime && lastResetTime > parseInt(userVotedTime)) {
-                        localStorage.removeItem('voteLockTime');
-                        localStorage.removeItem('userVotedTime');
-                    }
-                }
-            } catch (error) {
-                console.log('Fehler beim Prüfen des Resets:', error);
-            }
-        }
-
-        async function renderImages() {
-            const suesswasserGrid = document.getElementById('suesswasserGrid');
-            suesswasserGrid.innerHTML = '';
-            imageData.suesswasser.forEach(image => {
-                suesswasserGrid.appendChild(createImageCard(image, 'suesswasser'));
-            });
-
-            const salzwasserGrid = document.getElementById('salzwasserGrid');
-            salzwasserGrid.innerHTML = '';
-            imageData.salzwasser.forEach(image => {
-                salzwasserGrid.appendChild(createImageCard(image, 'salzwasser'));
-            });
-        }
-
-        function createImageCard(image, category) {
-            const card = document.createElement('div');
-            card.className = 'image-card';
-            card.dataset.imageId = image.id;
-            card.dataset.category = category;
-            card.onclick = () => selectImage(image.id, category);
-            card.innerHTML = `
-                <img src="${image.url}" alt="${image.name}">
-                <button class="zoom-button" onclick="openFullscreen('${image.url}', '${image.name}', event)">🔍</button>
-                <div class="image-name">${image.name}</div>
-            `;
-            return card;
-        }
-
-        function selectImage(imageId, category) {
-            if (isVotingLocked()) return;
-            const selectedArray = category === 'suesswasser' ? selectedSuesswasser : selectedSalzwasser;
-            const index = selectedArray.indexOf(imageId);
-            if (index > -1) {
-                selectedArray.splice(index, 1);
-            } else {
-                if (selectedArray.length < VOTES_PER_CATEGORY) {
-                    selectedArray.push(imageId);
-                }
-            }
-            updateImageSelection();
-            updateVoteButton();
-        }
-
-        function updateImageSelection() {
-            document.querySelectorAll('[data-category="suesswasser"]').forEach(card => {
-                card.classList.toggle('selected', selectedSuesswasser.includes(card.dataset.imageId));
-            });
-            document.querySelectorAll('[data-category="salzwasser"]').forEach(card => {
-                card.classList.toggle('selected', selectedSalzwasser.includes(card.dataset.imageId));
-            });
-            
-            const suesswasserCounter = document.getElementById('suesswasserCounter');
-            suesswasserCounter.textContent = `Ausgewählt: ${selectedSuesswasser.length} / 3`;
-            suesswasserCounter.classList.toggle('complete', selectedSuesswasser.length === 3);
-
-            const salzwasserCounter = document.getElementById('salzwasserCounter');
-            salzwasserCounter.textContent = `Ausgewählt: ${selectedSalzwasser.length} / 3`;
-            salzwasserCounter.classList.toggle('complete', selectedSalzwasser.length === 3);
-        }
-
-        function updateVoteButton() {
-            const total = selectedSuesswasser.length + selectedSalzwasser.length;
-            document.getElementById('submitVote').textContent = `Stimmen abgeben (${total} / 6)`;
-            document.getElementById('submitVote').disabled = total !== 6;
-        }
-
-        async function checkVotingStatus() {
-            const messageDiv = document.getElementById('votingMessage');
-            if (isVotingLocked()) {
-                const lockTime = parseInt(localStorage.getItem('voteLockTime'));
-                const remainingTime = lockTime - Date.now();
-                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                messageDiv.innerHTML = `<div class="message info">Du hast bereits abgestimmt. Du kannst in ${hours}h ${minutes}min erneut abstimmen.</div>`;
-                document.getElementById('votingCategories').style.opacity = '0.5';
-                document.getElementById('votingCategories').style.pointerEvents = 'none';
-                document.getElementById('submitVote').disabled = true;
-            } else {
-                messageDiv.innerHTML = '';
-                document.getElementById('votingCategories').style.opacity = '1';
-                document.getElementById('votingCategories').style.pointerEvents = 'auto';
-            }
-        }
-
-        function isVotingLocked() {
-            const lockTime = localStorage.getItem('voteLockTime');
-            return lockTime && Date.now() < parseInt(lockTime);
-        }
-
-        window.submitVote = async function() {
-            if (selectedSuesswasser.length !== 3 || selectedSalzwasser.length !== 3 || isVotingLocked()) return;
-            try {
-                const allSelected = [...selectedSuesswasser, ...selectedSalzwasser];
-                for (const imageId of allSelected) {
-                    const voteRef = doc(db, 'votes', String(imageId));
-                    const voteDoc = await getDoc(voteRef);
-                    if (voteDoc.exists()) {
-                        await updateDoc(voteRef, { count: increment(1) });
-                    } else {
-                        await setDoc(voteRef, { imageId: String(imageId), count: 1 });
-                    }
-                }
-                localStorage.setItem('voteLockTime', (Date.now() + LOCK_DURATION).toString());
-                localStorage.setItem('userVotedTime', Date.now().toString());
-                document.getElementById('votingMessage').innerHTML = '<div class="message success">✓ Deine Stimmen wurden erfolgreich abgegeben!</div>';
-                selectedSuesswasser = [];
-                selectedSalzwasser = [];
-                updateImageSelection();
-                updateVoteButton();
-                checkVotingStatus();
-            } catch (error) {
-                document.getElementById('votingMessage').innerHTML = '<div class="message error">❌ Fehler beim Abstimmen. Bitte versuche es erneut.</div>';
-            }
-        };
-
-        async function initializeMultiVoting() {
-            document.getElementById('multiVotingLoading').style.display = 'block';
-            document.getElementById('multiVotingCategories').style.display = 'none';
-            await renderMultiImages();
-            document.getElementById('multiVotingLoading').style.display = 'none';
-            document.getElementById('multiVotingCategories').style.display = 'block';
-        }
-
-        async function renderMultiImages() {
-            const suesswasserGrid = document.getElementById('multiSuesswasserGrid');
-            suesswasserGrid.innerHTML = '';
-            imageData.suesswasser.forEach(image => {
-                suesswasserGrid.appendChild(createMultiImageCard(image, 'suesswasser'));
-            });
-            const salzwasserGrid = document.getElementById('multiSalzwasserGrid');
-            salzwasserGrid.innerHTML = '';
-            imageData.salzwasser.forEach(image => {
-                salzwasserGrid.appendChild(createMultiImageCard(image, 'salzwasser'));
-            });
-        }
-
-        function createMultiImageCard(image, category) {
-            const card = document.createElement('div');
-            card.className = 'image-card';
-            card.dataset.imageId = image.id;
-            card.dataset.category = category;
-            card.onclick = () => selectMultiImage(image.id, category);
-            card.innerHTML = `
-                <img src="${image.url}" alt="${image.name}">
-                <button class="zoom-button" onclick="openFullscreen('${image.url}', '${image.name}', event)">🔍</button>
-                <div class="image-name">${image.name}</div>
-            `;
-            return card;
-        }
-
-        function selectMultiImage(imageId, category) {
-            const selectedArray = category === 'suesswasser' ? selectedMultiSuesswasser : selectedMultiSalzwasser;
-            const index = selectedArray.indexOf(imageId);
-            if (index > -1) {
-                selectedArray.splice(index, 1);
-            } else {
-                if (selectedArray.length < VOTES_PER_CATEGORY) {
-                    selectedArray.push(imageId);
-                }
-            }
-            updateMultiImageSelection();
-            updateMultiVoteButton();
-        }
-
-        function updateMultiImageSelection() {
-            document.querySelectorAll('#multiSuesswasserGrid .image-card').forEach(card => {
-                card.classList.toggle('selected', selectedMultiSuesswasser.includes(card.dataset.imageId));
-            });
-            document.querySelectorAll('#multiSalzwasserGrid .image-card').forEach(card => {
-                card.classList.toggle('selected', selectedMultiSalzwasser.includes(card.dataset.imageId));
-            });
-            
-            const suesswasserCounter = document.getElementById('multiSuesswasserCounter');
-            suesswasserCounter.textContent = `Ausgewählt: ${selectedMultiSuesswasser.length} / 3`;
-            suesswasserCounter.classList.toggle('complete', selectedMultiSuesswasser.length === 3);
-
-            const salzwasserCounter = document.getElementById('multiSalzwasserCounter');
-            salzwasserCounter.textContent = `Ausgewählt: ${selectedMultiSalzwasser.length} / 3`;
-            salzwasserCounter.classList.toggle('complete', selectedMultiSalzwasser.length === 3);
-        }
-
-        function updateMultiVoteButton() {
-            const total = selectedMultiSuesswasser.length + selectedMultiSalzwasser.length;
-            document.getElementById('submitMultiVote').textContent = `Stimmen abgeben (${total} / 6)`;
-            document.getElementById('submitMultiVote').disabled = total !== 6;
-        }
-
-        window.submitMultiVote = async function() {
-            if (selectedMultiSuesswasser.length !== 3 || selectedMultiSalzwasser.length !== 3) return;
-            try {
-                const allSelected = [...selectedMultiSuesswasser, ...selectedMultiSalzwasser];
-                for (const imageId of allSelected) {
-                    const voteRef = doc(db, 'votes', String(imageId));
-                    const voteDoc = await getDoc(voteRef);
-                    if (voteDoc.exists()) {
-                        await updateDoc(voteRef, { count: increment(1) });
-                    } else {
-                        await setDoc(voteRef, { imageId: String(imageId), count: 1 });
-                    }
-                }
-                document.getElementById('multiVotingMessage').innerHTML = '<div class="message success">✓ Stimmen erfolgreich abgegeben!</div>';
-                selectedMultiSuesswasser = [];
-                selectedMultiSalzwasser = [];
-                updateMultiImageSelection();
-                updateMultiVoteButton();
-                startMultiCooldown();
-            } catch (error) {
-                document.getElementById('multiVotingMessage').innerHTML = '<div class="message error">❌ Fehler beim Abstimmen.</div>';
-            }
-        };
-
-        function startMultiCooldown() {
-            let timeLeft = MULTI_COOLDOWN;
-            const overlay = document.getElementById('cooldownOverlay');
-            const timerDisplay = document.getElementById('cooldownTimer');
-            overlay.classList.add('active');
-            timerDisplay.textContent = timeLeft;
-            document.getElementById('multiVotingCategories').style.pointerEvents = 'none';
-            document.getElementById('multiVotingCategories').style.opacity = '0.5';
-            
-            multiCooldownTimer = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(multiCooldownTimer);
-                    overlay.classList.remove('active');
-                    document.getElementById('multiVotingCategories').style.pointerEvents = 'auto';
-                    document.getElementById('multiVotingCategories').style.opacity = '1';
-                    document.getElementById('multiVotingMessage').innerHTML = '';
-                }
-            }, 1000);
-        }
-
-        async function loadResults() {
-            document.getElementById('adminLoading').style.display = 'block';
-            document.getElementById('resultsContainer').style.display = 'none';
-            try {
-                const votesSnapshot = await getDocs(collection(db, 'votes'));
-                const votes = {};
-                let totalVotes = 0;
-                votesSnapshot.forEach((docSnapshot) => {
-                    const data = docSnapshot.data();
-                    votes[docSnapshot.id] = data.count || 0;
-                    totalVotes += data.count || 0;
-                });
-                document.getElementById('totalVotes').textContent = `Gesamtstimmen: ${totalVotes}`;
-                renderResults(votes, totalVotes);
-                document.getElementById('adminLoading').style.display = 'none';
-                document.getElementById('resultsContainer').style.display = 'block';
-            } catch (error) {
-                console.error('Fehler beim Laden der Ergebnisse:', error);
-                document.getElementById('adminLoading').innerHTML = '<div class="message error">❌ Fehler beim Laden der Ergebnisse: ' + error.message + '</div>';
-            }
-        }
-
-        function renderResults(votes, totalVotes) {
-            // Süßwasser Ergebnisse
-            const suesswasserTbody = document.getElementById('suesswasserResults');
-            suesswasserTbody.innerHTML = '';
-            const suesswasserImages = [...imageData.suesswasser];
-            suesswasserImages.sort((a, b) => (votes[b.id] || 0) - (votes[a.id] || 0));
-            
-            let suesswasserTotal = 0;
-            suesswasserImages.forEach(img => {
-                suesswasserTotal += votes[img.id] || 0;
-            });
-            
-            suesswasserImages.forEach(image => {
-                const row = document.createElement('tr');
-                const voteCount = votes[image.id] || 0;
-                const percentage = suesswasserTotal > 0 ? ((voteCount / suesswasserTotal) * 100).toFixed(1) : 0;
-                row.innerHTML = `
-                    <td><img src="${image.url}" alt="${image.name}"></td>
-                    <td>${image.name}</td>
-                    <td>${image.author}</td> <td><strong>${voteCount}</strong></td>
-                    <td>${percentage}%</td>
-                `;
-                suesswasserTbody.appendChild(row);
-            });
-
-            // Salzwasser Ergebnisse
-            const salzwasserTbody = document.getElementById('salzwasserResults');
-            salzwasserTbody.innerHTML = '';
-            const salzwasserImages = [...imageData.salzwasser];
-            salzwasserImages.sort((a, b) => (votes[b.id] || 0) - (votes[a.id] || 0));
-            
-            let salzwasserTotal = 0;
-            salzwasserImages.forEach(img => {
-                salzwasserTotal += votes[img.id] || 0;
-            });
-            
-           salzwasserImages.forEach(image => {
-                const row = document.createElement('tr');
-                const voteCount = votes[image.id] || 0;
-                const percentage = salzwasserTotal > 0 ? ((voteCount / salzwasserTotal) * 100).toFixed(1) : 0;
-                row.innerHTML = `
-                    <td><img src="${image.url}" alt="${image.name}"></td>
-                    <td>${image.name}</td>
-                    <td>${image.author}</td> <td><strong>${voteCount}</strong></td>
-                    <td>${percentage}%</td>
-                `;
-                salzwasserTbody.appendChild(row);
-            });
-        }
-
-        window.showResetModal = function() {
-            document.getElementById('resetModal').classList.add('active');
-        };
-
-        window.hideResetModal = function() {
-            document.getElementById('resetModal').classList.remove('active');
-        };
-
-        window.showFinalConfirmation = function() {
-            hideResetModal();
-            document.getElementById('finalConfirmModal').classList.add('active');
-        };
-
-        window.hideFinalConfirmation = function() {
-            document.getElementById('finalConfirmModal').classList.remove('active');
-        };
-
-        window.resetVoting = async function() {
-            try {
-                const votesSnapshot = await getDocs(collection(db, 'votes'));
-                const deletePromises = [];
-                votesSnapshot.forEach((document) => {
-                    deletePromises.push(deleteDoc(doc(db, 'votes', document.id)));
-                });
-                await Promise.all(deletePromises);
-                await setDoc(doc(db, 'system', 'lastReset'), { timestamp: Date.now() });
-                hideFinalConfirmation();
-                alert('✓ Abstimmung wurde erfolgreich zurückgesetzt! Alle Nutzer können nun erneut abstimmen.');
-                await loadResults();
-            } catch (error) {
-                console.error('Fehler beim Zurücksetzen:', error);
-                alert('❌ Fehler beim Zurücksetzen der Abstimmung.');
-            }
-        };
-
-
-
-
-
-        // Fullscreen Funktionen
-       window.zoomIn = function() {
-            currentZoom += zoomStep;
-            // FIX: Erlaubt mehr Zoomen (Limit auf 5.0 gesetzt, kann bei Bedarf erhöht werden)
-            if (currentZoom > 5.0) { 
-                currentZoom = 5.0;
-            }
-            const img = document.getElementById('zoomingImage');
-            if (img) {
-                img.style.transform = `scale(${currentZoom})`;
-                img.style.cursor = currentZoom > 1.0 ? 'grab' : 'default';
-            }
-        }
-
-        window.zoomOut = function() {
-            currentZoom -= zoomStep;
-            // Begrenzt den minimalen Zoom auf 1.0 (Originalgröße)
-            if (currentZoom < 1.0) {
-                currentZoom = 1.0;
-            }
-            const img = document.getElementById('zoomingImage');
-            if (img) {
-                img.style.transform = `scale(${currentZoom})`;
-                img.style.cursor = currentZoom > 1.0 ? 'grab' : 'default';
-            }
-        }
-
-
-
-
-
-       // Fullscreen Funktionen
-        // Fullscreen Funktionen
-        window.openFullscreen = function(imageUrl, imageName, event) {
-            if (event) {
-                event.stopPropagation(); // Verhindert dass das Bild beim Zoom-Klick ausgewählt wird
-            }
-
-            const fullscreenModal = document.getElementById('fullscreenModal');
-            const fullscreenContent = document.getElementById('fullscreenContent');
-
-            // 1. Zoom-Zustand zurücksetzen
-            currentZoom = 1.0;
-
-            // 2. HTML-Struktur mit Bild, Name und Zoom-Buttons einfügen
-            fullscreenContent.innerHTML = `
-                <div class="fullscreen-content-wrapper">
-                    <div class="fullscreen-image-area">
-                        <img src="${imageUrl}" alt="${imageName}" id="zoomingImage" class="fullscreen-image-zooming">
-                        <div class="zoom-controls">
-                            <button onclick="zoomOut(); event.stopPropagation()">➖</button>
-                            <button onclick="zoomIn(); event.stopPropagation()">➕</button>
-                        </div>
-                    </div>
-                    <div class="fullscreen-caption">${imageName}</div>
-                </div>
-            `;
-            
-            // 3. Zoom-Ansicht aktivieren
-            fullscreenModal.classList.add('active');
-
-            // 4. Transform auf 1.0 setzen
-            document.getElementById('zoomingImage').style.transform = `scale(${currentZoom})`;
-            document.getElementById('zoomingImage').style.cursor = 'default';
-        };
-
-        window.closeFullscreen = function(event) {
-            if (event) {
-                event.stopPropagation(); // Verhindert dass der Klick auf den Schließen-Button das Modal schließt
-            }
-            document.getElementById('fullscreenModal').classList.remove('active');
-            document.getElementById('fullscreenContent').innerHTML = ''; // Inhalt leeren
-        };
-
-        // Presentation Mode
-        let presentationStep = 0;
-        let presentationData = null;
-
-        async function startPresentation() {
-            try {
-                // Lade alle Votes
-                const votesSnapshot = await getDocs(collection(db, 'votes'));
-                const votes = {};
-                let totalVotes = 0;
-                
-                votesSnapshot.forEach((docSnapshot) => {
-                    votes[docSnapshot.id] = docSnapshot.data().count || 0;
-                    totalVotes += votes[docSnapshot.id];
-                });
-
-                // Bereite Daten für beide Kategorien vor
-                const suesswasserData = imageData.suesswasser.map(img => ({
-                    ...img,
-                    votes: votes[img.id] || 0,
-                    percentage: totalVotes > 0 ? ((votes[img.id] || 0) / totalVotes * 100).toFixed(1) : 0
-                })).sort((a, b) => b.votes - a.votes);
-
-                const salzwasserData = imageData.salzwasser.map(img => ({
-                    ...img,
-                    votes: votes[img.id] || 0,
-                    percentage: totalVotes > 0 ? ((votes[img.id] || 0) / totalVotes * 100).toFixed(1) : 0
-                })).sort((a, b) => b.votes - a.votes);
-
-                presentationData = {
-                    suesswasser: suesswasserData.slice(0, 3),
-                    salzwasser: salzwasserData.slice(0, 3),
-                    totalVotes: totalVotes
-                };
-
-                presentationStep = 0;
-                document.getElementById('presentationMode').classList.add('active');
-                showPresentationStep();
-            } catch (error) {
-                console.error('Fehler beim Laden der Präsentation:', error);
-                alert('Fehler beim Laden der Daten');
-            }
-        }
-
-        window.exitPresentation = function() {
-            document.getElementById('presentationMode').classList.remove('active');
-            presentationStep = 0;
-            presentationData = null;
-            window.location.href = 'index.html?admin';
-        };
-
-        window.nextStep = function() {
-            presentationStep++;
-            showPresentationStep();
-        };
-
-        window.previousStep = function() {
-            if (presentationStep > 0) {
-                presentationStep--;
-                showPresentationStep();
-            }
-        };
-
-        function showPresentationStep() {
-            const modeDiv = document.getElementById('presentationMode');
-            const content = document.getElementById('presentationContent');
-            const category = document.getElementById('presentationCategory');
-            const rightSide = document.getElementById('presentationRight');
-            const prevBtn = document.getElementById('prevStepBtn');
-
-            // Standard: Center-View und rightSide leeren
-            modeDiv.classList.remove('split-view');
-            modeDiv.classList.add('center-view');
-            rightSide.innerHTML = ''; 
-
-            prevBtn.disabled = presentationStep === 0;
-
-            // Süßwasser Phase
-            if (presentationStep === 0) {
-                // Statistiken anzeigen
-                category.textContent = '🌊 Süßwasser - Top 3';
-                content.innerHTML = createStatsDisplay(presentationData.suesswasser);
-            } else if (presentationStep >= 1 && presentationStep <= 3) {
-                // Plätze 3, 2, 1 (Index 2, 1, 0 für sortiertes Array)
-                modeDiv.classList.remove('center-view');
-                modeDiv.classList.add('split-view');
-                
-                const place = 4 - presentationStep; // Step 1 = Platz 3, Step 2 = Platz 2, Step 3 = Platz 1
-                const index = place - 1; // Platz 3 = Index 2, Platz 2 = Index 1, Platz 1 = Index 0
-                
-                category.textContent = '🌊 Süßwasser';
-                content.innerHTML = createWinnerInfo(presentationData.suesswasser[index], place);
-                rightSide.innerHTML = createWinnerImage(presentationData.suesswasser[index]);
-            }
-            // Salzwasser Phase
-            else if (presentationStep === 4) {
-                // Statistiken anzeigen
-                category.textContent = '🐠 Salzwasser - Top 3';
-                content.innerHTML = createStatsDisplay(presentationData.salzwasser);
-            } else if (presentationStep >= 5 && presentationStep <= 7) {
-                // Plätze 3, 2, 1 (Index 2, 1, 0 für sortiertes Array)
-                modeDiv.classList.remove('center-view');
-                modeDiv.classList.add('split-view');
-                
-                const place = 8 - presentationStep; // Step 5 = Platz 3, Step 6 = Platz 2, Step 7 = Platz 1
-                const index = place - 1; // Platz 3 = Index 2, Platz 2 = Index 1, Platz 1 = Index 0
-                
-                category.textContent = '🐠 Salzwasser';
-                content.innerHTML = createWinnerInfo(presentationData.salzwasser[index], place);
-                rightSide.innerHTML = createWinnerImage(presentationData.salzwasser[index]);
-            }
-            // Ende
-            else {
-                exitPresentation();
-            }
-        }
-
-        function createStatsDisplay(top3) {
-            return `
-                <div class="stats-display">
-                    ${top3.map((item, index) => `
-                        <div class="stat-item">
-                            <span class="stat-place">${index + 1}. Platz</span>
-                            <span class="stat-votes">${item.votes} Stimmen</span>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        function createWinnerInfo(winner, place) {
-            const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
-            return `
-                <div class="winner-info">
-                    <div class="winner-badge">${medals[place]} ${place}. Platz</div>
-                    <div class="winner-name">${winner.name}</div>
-                    <div class="winner-stats">${winner.votes} Stimmen</div>
-                </div>
-            `;
-        }
-
-       function createWinnerImage(winner) {
-            return `
-                <div class="winner-image-container">
-                    <div class="winner-image-wrapper">
-                        <img src="${winner.url}" alt="${winner.name}" class="winner-image">
-                        <div class="winner-author-overlay">${winner.author}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        init();
-    </script>
+  </section>
+
+  <!-- Präsentation -->
+  <section data-view="present" class="present" hidden>
+    <div class="present-stage" id="presentStage" aria-live="polite"></div>
+    <div class="present-progress" id="presentProgress" aria-hidden="true"></div>
+    <nav class="present-controls" aria-label="Präsentation steuern">
+      <button type="button" id="presentPrev" aria-label="Zurück">←</button>
+      <button type="button" id="presentFull" aria-label="Vollbild">⛶</button>
+      <a href="?admin" id="presentExit" aria-label="Zum Admin-Bereich">✕</a>
+      <button type="button" id="presentNext" aria-label="Weiter">→</button>
+    </nav>
+  </section>
+
+  <!-- Großansicht -->
+  <dialog id="lightbox" class="lightbox" aria-labelledby="lightboxTitle">
+    <div class="lightbox-top">
+      <h2 id="lightboxTitle"></h2>
+      <button type="button" class="icon-btn" id="lightboxClose" aria-label="Schließen">✕</button>
+    </div>
+    <div class="lightbox-image">
+      <button type="button" class="icon-btn nav" id="lightboxPrev" aria-label="Vorheriges Bild">‹</button>
+      <img id="lightboxImg" alt="">
+      <button type="button" class="icon-btn nav" id="lightboxNext" aria-label="Nächstes Bild">›</button>
+    </div>
+    <div class="lightbox-bottom">
+      <button type="button" class="btn btn-primary btn-wide" id="lightboxPick">Auswählen</button>
+    </div>
+  </dialog>
+
+  <!-- Bestätigung -->
+  <dialog id="confirm" class="sheet" aria-labelledby="confirmTitle">
+    <form method="dialog">
+      <h2 id="confirmTitle">Deine Auswahl</h2>
+      <div id="confirmBody"></div>
+      <div class="sheet-actions">
+        <button class="btn" value="cancel" type="submit" id="confirmCancel">Ändern</button>
+        <button class="btn btn-primary" value="ok" type="submit" id="confirmOk">Jetzt abstimmen</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Mehrfach-Modus: Pause zwischen zwei Personen -->
+  <div class="cooldown" id="cooldown" hidden>
+    <div>
+      <div class="cooldown-check" aria-hidden="true">✓</div>
+      <h2>Danke, Stimme gezählt!</h2>
+      <p>Gerät an die nächste Person weitergeben.</p>
+      <p class="cooldown-timer" id="cooldownTimer">15</p>
+    </div>
+  </div>
 </body>
 </html>
